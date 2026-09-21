@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" name="viewport" />
+    <title>ZERX-XIT PANEL | Premium Store</title>
+    <meta name="description" content="ZERX-XIT — buy premium panels and license keys, manage your orders, referrals and wallet." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23ef4136'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial,sans-serif' font-weight='900' fill='%23fff' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <link rel="stylesheet" href="css/user.css">
+</head>
+<body>
+
+    <!-- ANIMATION CONTAINER -->
+    <div class="anim-container" id="anim-container">
+        <canvas id="anim-canvas"></canvas>
+    </div>
+
+    <!-- BG GLOW -->
+    <div class="bg-glow">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- SECURITY OVERLAY -->
+    <div id="security-overlay">
+        <div class="shield-wrap">
+            <div class="shield-ring"></div>
+            <div class="shield-ring"></div>
+            <div class="shield-icon"><i class="fas fa-shield-alt"></i></div>
+        </div>
+        <div class="security-title">Securing Connection</div>
+        <div class="security-progress"><div class="bar" id="security-bar"></div></div>
+        <div class="security-status" id="security-status">Initializing security protocols...</div>
+        <div class="security-dots">
+            <span id="dot1"></span><span id="dot2"></span><span id="dot3"></span><span id="dot4"></span>
+        </div>
+        <div class="security-checkmark" id="security-check"><i class="fas fa-check-circle"></i></div>
+    </div>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="28" />
+            </svg>
+        </div>
+        <div class="loader-text">Loading</div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast-container"></div>
+
+    <!-- ==========================================
+    LANDING PAGE (shown before login)
+    ========================================== -->
+    <div id="landing-screen">
+        <nav class="land-nav">
+            <div class="land-brand"><div class="logo-icon" id="land-logo-icon"><span class="logo-fallback">ZX</span></div> ZERX-XIT</div>
+            <div class="land-actions">
+                <button onclick="landGoAuth('login')">Login</button>
+                <button class="primary" onclick="landGoAuth('signup')">Get Started</button>
+            </div>
+        </nav>
+
+        <section class="land-hero">
+            <span class="land-tag"><span class="dot"></span> Premium Free Fire Store</span>
+            <h1>Panels, keys &amp;<br><span>device-tuned sensitivity</span><br>all in one place</h1>
+            <p>Buy premium panels and license keys, track every order, earn from referrals, and generate a sensitivity preset calculated from your exact phone's hardware — not a generic number.</p>
+            <div class="land-hero-btns">
+                <button class="primary" onclick="landGoAuth('signup')"><i class="fas fa-rocket"></i> Create free account</button>
+                <button class="outline" onclick="landGoAuth('login')">I already have one</button>
+            </div>
+            <div class="land-hero-stats">
+                <div class="stat"><b>24/7</b><span>Support</span></div>
+                <div class="stat"><b>100%</b><span>Device-Matched</span></div>
+                <div class="stat"><b>Instant</b><span>Key Delivery</span></div>
+            </div>
+        </section>
+
+        <section class="land-section light">
+            <div class="land-section-inner">
+                <div class="land-section-head"><h2>What you get</h2><p>Everything in one account, no separate apps</p></div>
+                <div class="land-grid">
+                    <div class="land-card"><div class="icon-sq"><i class="fas fa-box-open"></i></div><h3>Premium panels &amp; keys</h3><p>Browse and purchase instantly, with your license key delivered straight to your account.</p></div>
+                    <div class="land-card"><div class="icon-sq"><i class="fas fa-crosshairs"></i></div><h3>Device-specific Sensi Generator</h3><p>Real hardware-based sensitivity — chipset, RAM, refresh rate and screen size all factored in.</p></div>
+                    <div class="land-card"><div class="icon-sq"><i class="fas fa-wallet"></i></div><h3>Wallet &amp; order tracking</h3><p>Top up once, buy anytime, and see every order and key in one history.</p></div>
+                    <div class="land-card"><div class="icon-sq"><i class="fas fa-users"></i></div><h3>Referral rewards</h3><p>Share your link and earn a bonus for every friend who joins.</p></div>
+                    <div class="land-card"><div class="icon-sq"><i class="fas fa-mobile-screen-button"></i></div><h3>Exact setup guides</h3><p>Not just numbers — the precise phone settings and menu paths to apply them.</p></div>
+                    <div class="land-card"><div class="icon-sq"><i class="fas fa-crown"></i></div><h3>VIP tier</h3><p>Instant access to the deeper device-optimization profile, no waiting.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="land-section" id="land-how" style="background:var(--bg-secondary);">
+            <div class="land-section-head"><h2>How it works</h2></div>
+            <div class="land-steps">
+                <div class="land-step"><div class="num">01</div><h3>Create your account</h3><p>Sign up with email or Google in seconds.</p></div>
+                <div class="land-step"><div class="num">02</div><h3>Top up your wallet</h3><p>Add funds once, spend anytime on panels and keys.</p></div>
+                <div class="land-step"><div class="num">03</div><h3>Generate your sensi</h3><p>Detect this device or search any model, pick a play style.</p></div>
+                <div class="land-step"><div class="num">04</div><h3>Apply &amp; play</h3><p>Copy the values in-game and follow the exact setup paths.</p></div>
+            </div>
+        </section>
+
+        <section class="land-section" id="land-plans">
+            <div class="land-section-head"><h2>Free vs VIP</h2><p>Upgrade any time from your profile</p></div>
+            <div class="land-plans">
+                <div class="land-plan">
+                    <span class="plan-badge">Free</span>
+                    <h3>Free account</h3>
+                    <div class="plan-price">₦0</div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Full sensitivity generator</li>
+                        <li><i class="fas fa-check"></i> Device detection &amp; search</li>
+                        <li><i class="fas fa-check"></i> Standard setup guides</li>
+                        <li><i class="fas fa-xmark"></i> Deeper XIT optimization profile</li>
+                        <li><i class="fas fa-xmark"></i> Skip the join-&amp;-share unlock</li>
+                    </ul>
+                    <button onclick="landGoAuth('signup')">Start free</button>
+                </div>
+                <div class="land-plan vip">
+                    <span class="plan-badge">VIP</span>
+                    <h3>VIP account</h3>
+                    <div class="plan-price" id="land-vip-price">₦2,000<span> one-time</span></div>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Everything in Free</li>
+                        <li><i class="fas fa-check"></i> Instant XIT optimization profile</li>
+                        <li><i class="fas fa-check"></i> No join-&amp;-share step, ever</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <button onclick="landGoAuth('signup')">Create account to unlock</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="land-cta">
+            <div class="land-cta-inner">
+                <h2>Ready to stop guessing your sensi?</h2>
+                <p>Create a free account, generate a preset built from your exact device, and upgrade to VIP any time for instant deep optimization.</p>
+                <div class="land-cta-btns">
+                    <button class="primary" onclick="landGoAuth('signup')">Create free account <i class="fas fa-arrow-right"></i></button>
+                    <button class="outline" onclick="document.getElementById('land-tg-link').click()"><i class="fab fa-telegram-plane"></i> Talk to us on Telegram</button>
+                </div>
+                <div class="land-cta-grid">
+                    <div class="cta-stat"><b>100%</b><span>Device-Matched Presets</span></div>
+                    <div class="cta-stat"><b>24/7</b><span>Support Available</span></div>
+                    <div class="cta-stat"><b>Instant</b><span>Key Delivery</span></div>
+                    <div class="cta-stat"><b>0</b><span>Guesswork</span></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="land-footer">
+            <div class="land-footer-inner">
+                <div class="land-footer-top">
+                    <div class="land-footer-brand">
+                        <div class="land-brand"><div class="logo-icon" style="width:36px;height:36px;font-size:15px;margin:0;"><span class="logo-fallback">ZX</span></div> ZERX-XIT</div>
+                        <p>Premium panels, license keys and device-tuned Free Fire sensitivity — all managed from one account.</p>
+                        <div class="land-footer-social">
+                            <a class="wa" href="#" id="land-wa-link-icon" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                            <a class="tg" href="#" id="land-tg-link-icon" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                        </div>
+                    </div>
+                    <div class="land-footer-col">
+                        <h4>Quick Links</h4>
+                        <a onclick="landShowLanding()">Home</a>
+                        <a onclick="document.getElementById('land-how').scrollIntoView({behavior:'smooth'})">How It Works</a>
+                        <a onclick="document.getElementById('land-plans').scrollIntoView({behavior:'smooth'})">Free vs VIP</a>
+                        <a onclick="landGoAuth('signup')">Create Account</a>
+                    </div>
+                    <div class="land-footer-col">
+                        <h4>Community</h4>
+                        <a id="land-wa-link" href="#" target="_blank">WhatsApp Channel</a>
+                        <a id="land-tg-link" href="#" target="_blank">Telegram</a>
+                        <a onclick="landGoAuth('login')">Sign In</a>
+                    </div>
+                </div>
+                <p class="land-foot">© <span id="land-year"></span> ZERX-XIT. All purchases and balances are managed inside your account.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="hidden">
+        <p style="text-align:center;padding:14px 20px 0;"><a href="#" onclick="landShowLanding();return false;" style="font-size:12px;color:var(--text-muted);text-decoration:none;"><i class="fas fa-arrow-left" style="margin-right:5px;"></i>Back to home</a></p>
+        <div class="auth-tabs" id="auth-tabs">
+            <button type="button" id="auth-tab-login" onclick="landGoAuth('login')">Sign In</button>
+            <button type="button" id="auth-tab-signup" onclick="landGoAuth('signup')">Create Account</button>
+        </div>
+        <div class="auth-container">
+            <!-- Login -->
+            <div class="auth-card" id="login-box">
+                <div class="brand">
+                    <div class="logo-icon" id="auth-logo-icon"><span class="logo-fallback">ZX</span></div>
+                    <h1>ZERX-XIT PANEL<span>OFFCIAL</span></h1>
+                    <p>Welcome back to your premium dashboard</p>
+                </div>
+                <div class="input-group">
+                    <input id="login-email" placeholder="Email address" type="email" />
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input id="login-pass" placeholder="Password" type="password" />
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-secondary);margin:-4px 0 14px;cursor:pointer;user-select:none;">
+                    <input id="login-remember" type="checkbox" checked style="width:15px;height:15px;accent-color:var(--accent-primary);margin:0;cursor:pointer;" />
+                    Remember me on this device
+                </label>
+                <button class="btn-auth" id="btn-login"><span><i class="fas fa-arrow-right"></i> Login</span></button>
+                <p class="auth-toggle">New here? <span id="go-to-signup">Create account</span></p>
+                <div class="auth-divider">or continue with</div>
+                <button type="button" class="google-auth-btn" id="btn-google-login" aria-label="Sign in with Google" title="Sign in with Google"><svg viewBox="0 0 48 48" width="20" height="20"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg> Sign in with Google</button>
+                <div class="social-row">
+                    <a class="social-btn wa" href="#" id="auth-wa-link" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a class="social-btn tg" href="#" id="auth-tg-link" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+                </div>
+                <p style="text-align:center;margin-top:16px;"><a href="diagnostic.html" target="_blank" style="font-size:11.5px;color:var(--text-muted);text-decoration:none;"><i class="fas fa-signal" style="margin-right:4px;"></i>Trouble signing in? Run connection check</a></p>
+            </div>
+
+            <!-- Signup -->
+            <div class="auth-card hidden" id="signup-box">
+                <div class="brand">
+                    <div class="logo-icon" id="auth-logo-icon-2"><span class="logo-fallback">ZX</span></div>
+                    <h1>Join <span>Now</span></h1>
+                    <p>Create your account and get started</p>
+                </div>
+                <div class="input-group">
+                    <input id="signup-email" placeholder="Email address" type="email" />
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input id="signup-pass" placeholder="Password (min 6 chars)" type="password" />
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <button class="btn-auth" id="btn-signup"><span><i class="fas fa-user-plus"></i> Sign Up</span></button>
+                <p class="auth-toggle">Already registered? <span id="go-to-login">Login</span></p>
+                <div class="auth-divider">or continue with</div>
+                <button type="button" class="google-auth-btn" id="btn-google-signup" aria-label="Sign in with Google" title="Sign in with Google"><svg viewBox="0 0 48 48" width="20" height="20"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg> Sign in with Google</button>
+                <div class="social-row">
+                    <a class="social-btn wa" href="#" id="auth-wa-link-2" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a class="social-btn tg" href="#" id="auth-tg-link-2" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+                </div>
+                <p style="text-align:center;margin-top:16px;"><a href="diagnostic.html" target="_blank" style="font-size:11.5px;color:var(--text-muted);text-decoration:none;"><i class="fas fa-signal" style="margin-right:4px;"></i>Trouble signing up? Run connection check</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    MAIN APP
+    ========================================== -->
+    <div id="main-app">
+
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="brand">
+                <div class="brand-icon" id="navbar-logo-icon"><span class="brand-fallback">ZX</span></div>
+                <img id="site-logo" src="" style="display:none;" />
+                <span id="site-name">ZERX-XIT PANEL</span>
+            </div>
+            <div class="nav-actions">
+                <!-- Notification Bell -->
+                <button class="notif-btn" id="notif-toggle" style="position:relative;">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge hidden" id="notif-badge">0</span>
+                </button>
+                <div class="notif-dropdown" id="notif-dropdown">
+                    <div id="notif-list"><div class="notif-empty">No notifications</div></div>
+                </div>
+
+                <div class="balance-pill"><i class="fas fa-wallet"></i> ₦<span id="nav-balance">0.00</span></div>
+                <button class="menu-btn" id="menu-toggle"><i class="fas fa-bars"></i></button>
+            </div>
+            <div class="dropdown" id="dropdown-menu">
+                <div class="dropdown-head">
+                    <div class="dropdown-brand"><div class="logo-icon" id="drawer-logo-icon"><span class="logo-fallback">ZX</span></div> ZERX-XIT</div>
+                    <button type="button" class="dropdown-close" onclick="document.getElementById('dropdown-menu').classList.remove('active')" aria-label="Close menu"><i class="fas fa-xmark"></i></button>
+                </div>
+                <div class="dropdown-scroll">
+                    <div class="dropdown-label">Main</div>
+                    <div class="dropdown-item active" onclick="navigate('home')"><i class="fas fa-th-large"></i> Store</div>
+                    <div class="dropdown-item" onclick="navigate('dashboard')"><i class="fas fa-chart-simple"></i> Dashboard <span class="badge-new" id="badge-dashboard">NEW</span></div>
+                    <div class="dropdown-item" onclick="navigate('rewards')"><i class="fas fa-gift"></i> Rewards <span class="badge-new" id="badge-rewards">SPIN</span></div>
+
+                    <div class="dropdown-label">Shop</div>
+                    <div class="dropdown-item" onclick="navigate('wallet')"><i class="fas fa-wallet"></i> Wallet</div>
+                    <div class="dropdown-item" onclick="navigate('orders')"><i class="fas fa-clipboard-list"></i> Order History</div>
+                    <div class="dropdown-item" onclick="navigate('history')"><i class="fas fa-key"></i> My Keys</div>
+                    <div class="dropdown-item" onclick="navigate('sensi')"><i class="fas fa-crosshairs"></i> Sensi Generator <span class="badge-new" id="badge-sensi">NEW</span></div>
+                    <div class="dropdown-item" onclick="navigate('refer')"><i class="fas fa-users"></i> Refer &amp; Earn <span class="badge-new" id="badge-refer">NEW</span></div>
+
+                    <div class="dropdown-label">Account</div>
+                    <div class="dropdown-item" onclick="navigate('profile')"><i class="fas fa-user"></i> Profile</div>
+                    <div class="dropdown-item" onclick="toggleLightMode()"><i class="fas fa-sun"></i> Toggle Light/Dark</div>
+                    <div class="dropdown-item" onclick="openThemePicker()"><i class="fas fa-palette"></i> Customize Theme <span class="theme-dot" id="nav-theme-dot" style="background:var(--accent-primary);"></span></div>
+                </div>
+                <div class="dropdown-foot">
+                    <div class="dropdown-item danger" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ==========================================
+        PAGE: HOME
+        ========================================== -->
+        <div class="page-content" id="page-home">
+            <div class="page-header">
+                <h2 class="page-title">Premium <span>Store</span></h2>
+                <div class="search-box">
+                    <input id="search-input" placeholder="Search panels..." type="text" />
+                    <i class="fas fa-search search-icon"></i>
+                    <i class="fas fa-spinner search-spinner" id="search-loader"></i>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="category-filters" id="category-filters">
+                <button class="filter-chip active" data-cat="all">All</button>
+                <button class="filter-chip" data-cat="mods">Mods</button>
+                <button class="filter-chip" data-cat="tools">Tools</button>
+                <button class="filter-chip" data-cat="vip">VIP</button>
+                <button class="filter-chip" data-cat="scripts">Scripts</button>
+            </div>
+
+            <!-- Promo Slider -->
+            <div id="promo-container" class="promo-slider hidden"></div>
+
+            <!-- Panel Grid -->
+            <div class="panel-grid" id="panels-container"></div>
+
+            <!-- Empty State -->
+            <div class="empty-state hidden" id="search-empty">
+                <i class="fas fa-search-minus"></i>
+                <p>No panels found</p>
+                <button class="btn-primary-solid" onclick="document.getElementById('search-input').value=''; document.getElementById('search-input').dispatchEvent(new Event('input'));" style="width:auto;padding:10px 28px;margin-top:12px;font-size:13px;">Clear Search</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="store-footer">
+                <h3>ZERX-XIT PANEL <span>OFFCIAL</span> STORE</h3>
+                <p>Best trusted store for premium Free Fire panels &amp; services</p>
+                <div class="badges"><span>🔒 Safe Payment</span><span>⚡ Secure Checkout</span><span>👥 1k+ Users</span></div>
+                <div class="features"><span>✔ Fast Delivery</span><span>✔ Instant Service</span><span>✔ Trusted Seller</span></div>
+                <p class="copy">© 2026-2031 ZERX-XIT PANEL. All rights reserved.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: DASHBOARD
+        ========================================== -->
+        <div class="page-content hidden" id="page-dashboard">
+            <div class="page-header">
+                <h2 class="page-title">My <span>Dashboard</span></h2>
+                <span style="font-size:12px;color:var(--text-secondary);background:var(--bg-input);padding:4px 16px;border-radius:30px;border:1px solid var(--border-color);">
+                    <i class="fas fa-chart-line"></i> Overview
+                </span>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row" id="stats-row">
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-balance">₦0</div>
+                    <div class="stat-label">Wallet Balance</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-referrals">0</div>
+                    <div class="stat-label">Referrals</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-orders">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-reward">₦0</div>
+                    <div class="stat-label">Referral Earnings</div>
+                </div>
+            </div>
+
+            <!-- Spending Chart -->
+            <div class="chart-container">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                    <h3 style="font-size:16px;font-weight:700;"><i class="fas fa-chart-bar" style="color:var(--accent-primary);margin-right:8px;"></i> Weekly Spending</h3>
+                    <span style="font-size:12px;color:var(--text-muted);">Last 7 days</span>
+                </div>
+                <div class="chart-box">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Refer & Earn Banner -->
+            <div class="refer-section" id="refer-banner">
+                <div class="refer-header">
+                    <h3>Refer &amp; Earn <span style="font-size:12px;background:var(--accent-primary);color:#fff;padding:2px 12px;border-radius:30px;">BONUS</span></h3>
+                    <div class="refer-earnings">💰 Earned: <span id="refer-earnings-amount">₦0</span></div>
+                </div>
+                <div class="refer-body">
+                    <div class="refer-link-box">
+                        <input id="refer-link-input" readonly value="https://zerx-xit.com/ref/XXXX" />
+                        <button class="copy-btn" onclick="copyReferLink()"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                    <div class="refer-stats">
+                        <div class="rs"><div class="rs-num" id="ref-total">0</div><div class="rs-label">Total Referrals</div></div>
+                        <div class="rs"><div class="rs-num" id="ref-active">0</div><div class="rs-label">Active</div></div>
+                        <div class="rs"><div class="rs-num" id="ref-earnings">₦0</div><div class="rs-label">Earned</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <div class="section-box">
+                    <div class="box-header">
+                        <h3><i class="fas fa-clock" style="color:var(--accent-primary);margin-right:8px;"></i> Recent Activity</h3>
+                        <span class="view-all" onclick="navigate('orders')">View All →</span>
+                    </div>
+                    <div class="activity-list" id="activity-list">
+                        <div style="padding:20px;text-align:center;color:var(--text-muted);">Loading...</div>
+                    </div>
+                </div>
+                <div class="section-box">
+                    <div class="box-header">
+                        <h3><i class="fas fa-bolt" style="color:var(--accent-primary);margin-right:8px;"></i> Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="navigate('wallet')">
+                            <span class="qa-icon"><i class="fas fa-wallet"></i></span>
+                            <span class="qa-label">Deposit</span>
+                        </div>
+                        <div class="quick-action" onclick="navigate('orders')">
+                            <span class="qa-icon"><i class="fas fa-clipboard-list"></i></span>
+                            <span class="qa-label">Orders</span>
+                        </div>
+                        <div class="quick-action" onclick="navigate('refer')">
+                            <span class="qa-icon"><i class="fas fa-users"></i></span>
+                            <span class="qa-label">Refer &amp; Earn</span>
+                        </div>
+                        <div class="quick-action" onclick="navigate('history')">
+                            <span class="qa-icon"><i class="fas fa-key"></i></span>
+                            <span class="qa-label">My Keys</span>
+                        </div>
+                        <div class="quick-action" onclick="navigate('rewards')">
+                            <span class="qa-icon"><i class="fas fa-gift"></i></span>
+                            <span class="qa-label">Spin Wheel</span>
+                        </div>
+                        <div class="quick-action" onclick="navigate('profile')">
+                            <span class="qa-icon"><i class="fas fa-user"></i></span>
+                            <span class="qa-label">Profile</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: REWARDS (SPIN WHEEL)
+        ========================================== -->
+        <div class="page-content hidden" id="page-rewards">
+            <div class="page-header"><h2 class="page-title"><i class="fas fa-gift" style="color:var(--accent-primary);"></i> Spin &amp; <span>Win</span></h2></div>
+            <div class="spin-section">
+                <div class="spin-header">
+                    <h3><i class="fas fa-sync-alt fa-spin"></i> Lucky Spin</h3>
+                    <div class="spin-info">🎯 Spins left: <span id="spin-count">1</span> today</div>
+                </div>
+                <div class="spin-wheel-wrap">
+                    <canvas id="wheelCanvas" width="400" height="400"></canvas>
+                    <div class="pointer"><i class="fas fa-caret-down"></i></div>
+                </div>
+                <div class="spin-btn-wrap">
+                    <button class="btn-spin" id="btn-spin"><i class="fas fa-play"></i> SPIN</button>
+                </div>
+                <div class="spin-result-box" id="spin-result">🎰 Spin the wheel to win rewards!</div>
+            </div>
+            <div style="max-width:560px;margin:0 auto;text-align:center;padding:12px 20px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border-color);">
+                <p style="color:var(--text-secondary);font-size:13px;">
+                    <i class="fas fa-info-circle" style="color:var(--accent-primary);"></i>
+                    You get <strong style="color:var(--accent-primary);">1 free spin</strong> every day. Win extra balance, discounts, or try again!
+                </p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: WALLET
+        ========================================== -->
+        <div class="page-content hidden" id="page-wallet">
+            <div class="page-header"><h2 class="page-title">My <span>Wallet</span></h2></div>
+
+            <div class="wallet-stats">
+                <div class="wallet-stat"><div class="stat-icon yellow"><i class="fas fa-wallet"></i></div><div class="stat-info"><h4>Balance</h4><h2 id="wallet-stat-bal">₦0.00</h2></div></div>
+                <div class="wallet-stat"><div class="stat-icon green"><i class="fas fa-calendar-day"></i></div><div class="stat-info"><h4>Today</h4><h2 id="wallet-stat-today">₦0.00</h2></div></div>
+                <div class="wallet-stat"><div class="stat-icon purple"><i class="fas fa-arrow-down"></i></div><div class="stat-info"><h4>Total Deposit</h4><h2 id="wallet-stat-dep">₦0.00</h2></div></div>
+                <div class="wallet-stat"><div class="stat-icon gold"><i class="fas fa-clock"></i></div><div class="stat-info"><h4>Pending</h4><h2 id="wallet-stat-pending">₦0.00</h2></div></div>
+            </div>
+
+            <div class="premium-card">
+                <div class="card-head"><i class="fas fa-qrcode" style="color:var(--accent-purple);"></i><h3>Bank Account Number</h3></div>
+                <p class="card-desc">Scan the QR or copy the bank account number to transfer funds manually. We'll verify and add to your wallet.</p>
+                <div class="qr-display manual">
+                    <img id="manual-qr-display" src="" alt="QR" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-qrcode\\' style=\\'font-size:48px;color:var(--text-muted);\\'></i>'" />
+                </div>
+                <div style="text-align:center;margin-bottom:20px;">
+                    <a id="manual-qr-download" href="#" download="QR.jpg" class="btn-outline" style="border-color:var(--accent-purple);color:var(--accent-purple);">Download QR</a>
+                </div>
+                <div class="copy-row">
+                    <div><span class="copy-label">Bank Account Number</span><div class="copy-value" id="manual-upi-display">Loading...</div></div>
+                    <button class="copy-btn" onclick="copyToClipboard('manual-upi-display','Bank Account Number')">Copy</button>
+                </div>
+                <div class="input-group"><input id="manual-amount" placeholder="Amount Sent (₦)" type="number" /></div>
+                <div class="input-group"><input id="manual-utr" placeholder="12-Digit UTR / Ref No." type="text" /></div>
+                <div class="input-group"><input id="manual-app" placeholder="Payment App (PhonePe, Paytm, etc.)" type="text" /></div>
+                <div class="input-group">
+                    <label style="display:block;font-size:12px;color:var(--text-muted);margin-bottom:8px;">Upload Payment Receipt</label>
+                    <div class="receipt-upload-wrapper">
+                        <input type="file" id="manual-receipt-input" accept="image/*" />
+                    </div>
+                    <div id="receipt-preview-wrap">
+                        <img id="receipt-preview" src="" alt="Receipt Preview" />
+                        <span id="receipt-status"></span>
+                    </div>
+                </div>
+                <button class="btn-primary-solid" id="btn-submit-manual" style="width:100%;background:linear-gradient(135deg,var(--accent-purple),#7c3aed);"><i class="fas fa-paper-plane"></i> Submit Request</button>
+            </div>
+
+            <div class="wallet-support-section">
+                <div class="support-card">
+                    <i class="fas fa-headset" style="font-size:40px;color:var(--accent-green);margin-bottom:12px;display:block;"></i>
+                    <h4 style="font-size:18px;font-weight:800;margin-bottom:6px;">Need Help?</h4>
+                    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">Facing issues with deposits, purchases, or your account? Contact support.</p>
+                    <div class="support-btns">
+                        <a href="#" id="support-wa-btn" target="_blank" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp Support</a>
+                        <a href="#" id="support-tg-btn" target="_blank" class="tg"><i class="fab fa-telegram-plane"></i> Telegram Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: ORDER HISTORY
+        ========================================== -->
+        <div class="page-content hidden" id="page-orders">
+            <div class="page-header">
+                <h2 class="page-title">Order <span>History</span></h2>
+                <span style="font-size:13px;color:var(--text-secondary);background:var(--bg-input);padding:6px 16px;border-radius:30px;border:1px solid var(--border-color);"><i class="fas fa-clock"></i> All orders with status</span>
+            </div>
+            <div class="order-grid" id="orders-container"></div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: REFER & EARN
+        ========================================== -->
+        <div class="page-content hidden" id="page-refer">
+            <div class="page-header"><h2 class="page-title">Refer &amp; <span>Earn</span></h2></div>
+
+            <div class="refer-section" style="border-color:rgba(var(--accent-primary-rgb),0.15);">
+                <div class="refer-header">
+                    <h3>Invite Friends, Get Rewards</h3>
+                    <div class="refer-earnings">💰 Total Earned: <span id="refer-page-earnings">₦0</span></div>
+                </div>
+                <p style="color:var(--text-secondary);margin-bottom:20px;font-size:14px;line-height:1.7;">
+                    Share your referral link with friends. When they sign up and make their first purchase,
+                    you both get <strong style="color:var(--accent-primary);">₦50 bonus</strong>!
+                </p>
+                <div class="refer-body">
+                    <div class="refer-link-box" style="flex:1;">
+                        <input id="refer-page-link-input" readonly value="https://zerx-xit.com/ref/XXXX" />
+                        <button class="copy-btn" onclick="copyReferLinkPage()"><i class="fas fa-copy"></i> Copy Link</button>
+                    </div>
+                    <button class="btn-primary-solid" style="width:auto;padding:12px 32px;" onclick="shareReferLink()"><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:24px;">
+                <div class="stat-item"><div class="stat-number" id="ref-page-total">0</div><div class="stat-label">Total Referrals</div></div>
+                <div class="stat-item"><div class="stat-number" id="ref-page-active">0</div><div class="stat-label">Active Users</div></div>
+                <div class="stat-item"><div class="stat-number" id="ref-page-earnings-display">₦0</div><div class="stat-label">Total Earnings</div></div>
+                <div class="stat-item"><div class="stat-number" id="ref-page-pending">₦0</div><div class="stat-label">Pending Rewards</div></div>
+            </div>
+
+            <div class="section-box" style="margin-top:24px;">
+                <div class="box-header"><h3><i class="fas fa-list" style="color:var(--accent-primary);"></i> Referral History</h3></div>
+                <div id="referral-history-list">
+                    <div style="padding:20px;text-align:center;color:var(--text-muted);">No referrals yet. Share your link!</div>
+                </div>
+            </div>
+
+            <div class="section-box" style="margin-top:24px;background:rgba(var(--accent-primary-rgb),0.02);border-color:rgba(var(--accent-primary-rgb),0.06);">
+                <h4 style="font-weight:700;margin-bottom:12px;"><i class="fas fa-info-circle" style="color:var(--accent-primary);"></i> How It Works</h4>
+                <ul style="color:var(--text-secondary);font-size:14px;line-height:2;list-style:none;padding:0;">
+                    <li>✅ <strong style="color:var(--text-primary);">1.</strong> Share your unique referral link with friends</li>
+                    <li>✅ <strong style="color:var(--text-primary);">2.</strong> Friend signs up using your link</li>
+                    <li>✅ <strong style="color:var(--text-primary);">3.</strong> Friend makes their first purchase (min ₦100)</li>
+                    <li>✅ <strong style="color:var(--text-primary);">4.</strong> You both get <strong style="color:var(--accent-primary);">₦50 bonus</strong> instantly!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: PROFILE
+        ========================================== -->
+        <div class="page-content hidden" id="page-profile">
+            <div class="page-header"><h2 class="page-title">Account <span>Details</span></h2></div>
+            <div class="profile-card">
+                <div class="profile-cover"></div>
+                <div class="profile-avatar" id="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="prof-name">User</div>
+                    <div class="profile-email" id="prof-email">user@email.com</div>
+                </div>
+                <div class="prof-item"><span class="label"><i class="fas fa-wallet"></i> Balance</span><span class="value green" id="prof-bal">₦0.00</span></div>
+                <div class="prof-item"><span class="label"><i class="fas fa-users"></i> Referrals</span><span class="value highlight" id="prof-referrals">0</span></div>
+                <div class="prof-item"><span class="label"><i class="fas fa-shopping-cart"></i> Purchases</span><span class="value" id="prof-purchases">0</span></div>
+                <div class="prof-item"><span class="label"><i class="fas fa-chart-line"></i> Total Spent</span><span class="value highlight" id="prof-spent">₦0.00</span></div>
+                <div class="prof-item"><span class="label"><i class="fas fa-calendar-alt"></i> Joined</span><span class="value" id="prof-date">...</span></div>
+                <div class="prof-item"><span class="label"><i class="fas fa-gift"></i> Referral Earnings</span><span class="value highlight" id="prof-referral-earnings">₦0.00</span></div>
+                <div class="prof-item"><span class="label"><i class="fas fa-crown"></i> VIP Status</span><span class="value" id="prof-vip-status">Free account</span></div>
+            </div>
+
+            <div class="sensi-card" id="vip-upsell-card">
+                <div class="sensi-card-head">
+                    <h3><i class="fas fa-crown" style="color:var(--accent-primary);"></i> Upgrade to VIP</h3>
+                    <p>Instant access to the deeper XIT optimization profile in the Sensi Generator — no join-and-share step, ever.</p>
+                </div>
+                <button class="sensi-generate-btn" id="btn-activate-vip"><i class="fas fa-crown"></i> Activate VIP — <span id="vip-price-label">₦2,000</span></button>
+                <p class="sensi-generate-note">Charged instantly from your wallet balance. Top up first if needed.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: MY KEYS
+        ========================================== -->
+        <div class="page-content hidden" id="page-history">
+            <div class="page-header"><h2 class="page-title">My <span>Keys</span></h2>
+                <button class="btn-outline" id="btn-export-keys" title="Export my keys as CSV" style="flex:0 0 auto;"><i class="fas fa-file-csv"></i> Export CSV</button>
+            </div>
+            <div class="history-grid" id="history-container"></div>
+        </div>
+
+        <!-- ==========================================
+        PAGE: SENSI GENERATOR
+        ========================================== -->
+        <div class="page-content hidden" id="page-sensi">
+            <div class="page-header"><h2 class="page-title">Sensi <span>Generator</span></h2></div>
+
+            <div class="sensi-steps" id="sensi-steps">
+                <div class="sensi-step done">1. Device</div>
+                <div class="sensi-step">2. Play style</div>
+                <div class="sensi-step">3. Fine tune</div>
+                <div class="sensi-step">4. Result</div>
+            </div>
+
+            <!-- Step 1: Device -->
+            <div class="sensi-card" id="sensi-device-card">
+                <div class="sensi-card-head">
+                    <h3><i class="fas fa-mobile-screen-button" style="color:var(--accent-primary);"></i> 1. Device</h3>
+                    <p>Use this phone, or search any supported model. Numbers are calculated from real hardware — never random.</p>
+                </div>
+
+                <div class="sensi-tabs">
+                    <div class="sensi-tab active" id="sensi-tab-mine" data-mode="mine">
+                        <strong>My Device</strong><span>Detect automatically</span>
+                    </div>
+                    <div class="sensi-tab" id="sensi-tab-other" data-mode="other">
+                        <strong>Another Device</strong><span>Search any model</span>
+                    </div>
+                </div>
+
+                <!-- My Device -->
+                <div class="sensi-panel active" id="sensi-panel-mine">
+                    <div class="sensi-detect-grid">
+                        <div class="sensi-detect-item wide"><span class="sensi-detect-label">Detected device</span><span class="sensi-detect-value" id="sensi-d-model">Detecting…</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">OS</span><span class="sensi-detect-value" id="sensi-d-os">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Browser</span><span class="sensi-detect-value" id="sensi-d-browser">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Screen</span><span class="sensi-detect-value" id="sensi-d-screen">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Pixel ratio</span><span class="sensi-detect-value" id="sensi-d-pixel">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Physical RAM</span><span class="sensi-detect-value" id="sensi-d-ram">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">CPU threads</span><span class="sensi-detect-value" id="sensi-d-cpu">—</span></div>
+                        <div class="sensi-detect-item wide"><span class="sensi-detect-label">Graphics (GPU)</span><span class="sensi-detect-value" id="sensi-d-gpu">—</span></div>
+                    </div>
+
+                    <p class="sensi-match-status" id="sensi-match-status">Checking your model against the device database…</p>
+
+                    <div class="sensi-form-row">
+                        <div>
+                            <label class="sensi-form-label">Extended / Virtual RAM (optional)</label>
+                            <select class="sensi-select" id="sensi-ext-ram">
+                                <option value="0">None</option>
+                                <option value="2">+2 GB</option>
+                                <option value="3">+3 GB</option>
+                                <option value="4">+4 GB</option>
+                                <option value="6">+6 GB</option>
+                                <option value="8">+8 GB</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="sensi-form-label">Current sensitivity feel (optional)</label>
+                            <select class="sensi-select" id="sensi-current-feel">
+                                <option value="">Not sure / first time</option>
+                                <option value="fast">Currently too fast for me</option>
+                                <option value="slow">Currently too slow for me</option>
+                                <option value="good">Currently feels good</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p class="sensi-note">A browser can only read what your phone reports. Chrome on Android reports the real model name; Safari, Firefox and most in-app browsers don't. Physical RAM and extended/virtual RAM are always kept separate — they are never added together. If your exact model isn't detected, use <strong>Another Device</strong> instead — the result is identical.</p>
+                </div>
+
+                <!-- Another Device -->
+                <div class="sensi-panel" id="sensi-panel-other">
+                    <div class="sensi-search-wrap">
+                        <label class="sensi-form-label">Search any device</label>
+                        <input type="text" class="sensi-input" id="sensi-search-input" placeholder="e.g. Infinix HOT 30i, Galaxy A06, iPhone 13…" autocomplete="off">
+                        <div class="sensi-search-results" id="sensi-search-results"></div>
+                    </div>
+                    <div class="sensi-form-row">
+                        <div>
+                            <label class="sensi-form-label">Or browse by brand</label>
+                            <select class="sensi-select" id="sensi-brand-select"><option value="">Select brand…</option></select>
+                        </div>
+                        <div id="sensi-model-step" style="display:none;">
+                            <label class="sensi-form-label">Model</label>
+                            <select class="sensi-select" id="sensi-model-select"><option value="">Select model…</option></select>
+                        </div>
+                    </div>
+                    <div class="sensi-detect-grid" id="sensi-other-specs" style="display:none;">
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Processor</span><span class="sensi-detect-value" id="sensi-o-proc">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">GPU</span><span class="sensi-detect-value" id="sensi-o-gpu">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">RAM</span><span class="sensi-detect-value" id="sensi-o-ram">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">OS</span><span class="sensi-detect-value" id="sensi-o-os">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Refresh rate</span><span class="sensi-detect-value" id="sensi-o-refresh">—</span></div>
+                        <div class="sensi-detect-item"><span class="sensi-detect-label">Screen</span><span class="sensi-detect-value" id="sensi-o-screen">—</span></div>
+                    </div>
+                    <p class="sensi-note">Not listed? Pick the closest model by chipset/RAM — the recommendation will still be close, and you can fine-tune it after generating.</p>
+                </div>
+            </div>
+
+            <!-- Step 2: Play style -->
+            <div class="sensi-card">
+                <div class="sensi-card-head">
+                    <h3><i class="fas fa-crosshairs" style="color:var(--accent-primary);"></i> 2. Play style</h3>
+                    <p>Each style changes the calculated values, not just the label.</p>
+                </div>
+                <div class="sensi-chips" id="sensi-style-chips">
+                    <button type="button" class="sensi-chip" data-style="One Tap">One Tap</button>
+                    <button type="button" class="sensi-chip active" data-style="Balanced">Balanced</button>
+                    <button type="button" class="sensi-chip" data-style="Rusher">Close Range / Rusher</button>
+                    <button type="button" class="sensi-chip" data-style="Freestyle">Freestyle</button>
+                    <button type="button" class="sensi-chip" data-style="Sniper">Long Range / Sniper</button>
+                    <button type="button" class="sensi-chip" data-style="Instaplayer">Drag Headshot</button>
+                </div>
+                <p class="sensi-hint" id="sensi-style-hint">Well-rounded values for every situation.</p>
+            </div>
+
+            <!-- Step 3: Fine tuning -->
+            <div class="sensi-card">
+                <div class="sensi-card-head">
+                    <h3><i class="fas fa-sliders" style="color:var(--accent-primary);"></i> 3. Fine tuning</h3>
+                    <p>Optional. Nudges every value by a fixed step to match your feel.</p>
+                </div>
+                <div class="sensi-tune-row" id="sensi-tune-row">
+                    <button type="button" class="sensi-tune-opt" data-tune="-2">Much lower</button>
+                    <button type="button" class="sensi-tune-opt" data-tune="-1">Lower</button>
+                    <button type="button" class="sensi-tune-opt active" data-tune="0">Recommended</button>
+                    <button type="button" class="sensi-tune-opt" data-tune="1">Higher</button>
+                    <button type="button" class="sensi-tune-opt" data-tune="2">Much higher</button>
+                </div>
+                <p class="sensi-note">Screen size and pixel density are calibrated automatically on top of this.</p>
+            </div>
+
+            <!-- Step 4: Generate -->
+            <div class="sensi-card">
+                <button class="sensi-generate-btn" id="sensi-generate-btn">Generate my sensitivity</button>
+                <p class="sensi-generate-note" id="sensi-generate-note">Free accounts join &amp; share to unlock each generation — VIP generates instantly, every time.</p>
+            </div>
+
+            <!-- Result -->
+            <div id="sensi-result-wrap" style="display:none;">
+                <div class="sensi-card">
+                    <div class="sensi-result-head">
+                        <span class="section-tag">ZERX Device-Optimized Sensi</span>
+                        <h3 id="sensi-r-device">—</h3>
+                        <div class="sensi-chips-meta">
+                            <span class="sensi-meta-chip" id="sensi-r-style">—</span>
+                            <span class="sensi-meta-chip" id="sensi-r-ram">—</span>
+                            <span class="sensi-meta-chip" id="sensi-r-chipset">—</span>
+                            <span class="sensi-meta-chip" id="sensi-r-time">—</span>
+                            <span class="sensi-meta-chip" id="sensi-r-ai-badge" style="display:none;background:linear-gradient(135deg,var(--accent-primary-light),var(--accent-primary));color:#fff;font-weight:800;border:none;"><i class="fas fa-sparkles"></i> AI-generated</span>
+                            <span class="sensi-meta-chip" id="sensi-r-offline-badge" style="display:none;"><i class="fas fa-microchip"></i> Offline model</span>
+                        </div>
+                        <p id="sensi-r-source-note" style="display:none;font-size:11.5px;color:var(--text-muted);margin-top:6px;"></p>
+                    </div>
+
+                    <div class="sensi-grid">
+                        <div class="sensi-val-card"><div class="sensi-val-label">General</div><div class="sensi-val-number" id="sensi-v-general">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-general"></div></div></div>
+                        <div class="sensi-val-card"><div class="sensi-val-label">Red Dot</div><div class="sensi-val-number" id="sensi-v-reddot">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-reddot"></div></div></div>
+                        <div class="sensi-val-card"><div class="sensi-val-label">2x Scope</div><div class="sensi-val-number" id="sensi-v-2x">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-2x"></div></div></div>
+                        <div class="sensi-val-card"><div class="sensi-val-label">4x Scope</div><div class="sensi-val-number" id="sensi-v-4x">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-4x"></div></div></div>
+                        <div class="sensi-val-card"><div class="sensi-val-label">Sniper Scope</div><div class="sensi-val-number" id="sensi-v-sniper">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-sniper"></div></div></div>
+                        <div class="sensi-val-card"><div class="sensi-val-label">Free Look</div><div class="sensi-val-number" id="sensi-v-freelook">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-freelook"></div></div></div>
+                        <div class="sensi-val-card"><div class="sensi-val-label">Fire Button</div><div class="sensi-val-number" id="sensi-v-fire">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-fire"></div></div></div>
+                        <div class="sensi-val-card wide" id="sensi-dpi-card"><div class="sensi-val-label">DPI (Android)</div><div class="sensi-val-number" id="sensi-v-dpi">—</div><div class="sensi-val-bar"><div class="sensi-val-fill" id="sensi-b-dpi"></div></div></div>
+                    </div>
+
+                    <div class="result-actions" style="margin-top:16px;">
+                        <button class="btn-primary-solid" id="sensi-btn-copy" style="width:auto;padding:10px 20px;"><i class="fas fa-copy"></i> Copy settings</button>
+                        <button class="btn-outline" id="sensi-btn-regenerate" style="flex:0 0 auto;padding:10px 20px;"><i class="fas fa-rotate"></i> Start over</button>
+                    </div>
+                </div>
+
+                <div class="sensi-card">
+                    <div class="sensi-score-wrap">
+                        <div class="sensi-score-ring">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="sensi-score-bg" cx="50" cy="50" r="42"></circle>
+                                <circle class="sensi-score-fill" id="sensi-score-circle" cx="50" cy="50" r="42"></circle>
+                            </svg>
+                            <div class="sensi-score-text"><span class="sensi-score-num" id="sensi-score-num">0</span><span class="sensi-score-label">Device score</span></div>
+                        </div>
+                        <div class="sensi-score-info">
+                            <h3 style="font-size:14px;font-weight:700;margin-bottom:4px;">Why these settings</h3>
+                            <p id="sensi-r-reasoning">—</p>
+                            <ul class="sensi-note-list" id="sensi-r-notes"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sensi-card">
+                    <div class="sensi-card-head">
+                        <h3><i class="fas fa-comment-dots" style="color:var(--accent-primary);"></i> Not quite right?</h3>
+                        <p>Tell us how it feels — we'll adjust this exact preset, not generate something unrelated.</p>
+                    </div>
+                    <div class="sensi-feedback-grid">
+                        <button class="sensi-feedback-btn" data-fb="general_fast">General too fast</button>
+                        <button class="sensi-feedback-btn" data-fb="general_slow">General too slow</button>
+                        <button class="sensi-feedback-btn" data-fb="reddot_fast">Red Dot too fast</button>
+                        <button class="sensi-feedback-btn" data-fb="reddot_slow">Red Dot too slow</button>
+                        <button class="sensi-feedback-btn" data-fb="2x_fast">2x too fast</button>
+                        <button class="sensi-feedback-btn" data-fb="4x_slow">4x too slow</button>
+                        <button class="sensi-feedback-btn" data-fb="drag_heavy">Drag feels heavy</button>
+                        <button class="sensi-feedback-btn" data-fb="drag_high">Drag goes too high</button>
+                    </div>
+                </div>
+
+                <h2 class="section-subtitle" style="font-size:16px;font-weight:700;margin:20px 0 4px;">Recommended device setup</h2>
+                <p class="sensi-note" style="margin-bottom:14px;">Apply these on your phone — a website cannot change system settings for you.</p>
+                <div class="sensi-tips-grid">
+                    <div class="sensi-card sensi-tips-card" id="sensi-xit-card">
+                        <h4><i class="fas fa-mobile-screen" style="color:var(--accent-primary);"></i> Phone &amp; developer settings <span style="font-size:9.5px;font-weight:800;background:linear-gradient(135deg,var(--accent-primary-light),var(--accent-primary));color:#fff;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle;">XIT</span></h4>
+                        <ul class="sensi-tips-list" id="sensi-tips-phone"></ul>
+                        <div id="sensi-xit-lock" style="display:none;text-align:center;padding:10px 4px;">
+                            <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.6;">Free accounts unlock this per generation by joining our channels and sharing. VIP skips this step permanently.</p>
+                            <button class="btn-outline" id="btn-xit-unlock-join" style="margin-bottom:8px;"><i class="fas fa-signal"></i> Join &amp; share to unlock</button>
+                        </div>
+                    </div>
+                    <div class="sensi-card sensi-tips-card"><h4><i class="fas fa-gamepad" style="color:var(--accent-primary);"></i> In-game tips</h4><ul class="sensi-tips-list" id="sensi-tips-gaming"></ul></div>
+                    <div class="sensi-card sensi-tips-card"><h4><i class="fas fa-battery-three-quarters" style="color:var(--accent-primary);"></i> Battery &amp; thermals</h4><ul class="sensi-tips-list" id="sensi-tips-battery"></ul></div>
+                </div>
+
+                <div class="sensi-card" id="sensi-history-card" style="display:none;">
+                    <div class="sensi-card-head"><h3><i class="fas fa-clock-rotate-left" style="color:var(--accent-primary);"></i> Recent generations</h3></div>
+                    <div class="sensi-history-list" id="sensi-history-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELEGRAM FAB -->
+        <a class="telegram-fab" href="#" id="global-telegram-btn" target="_blank" style="display:none;"><i class="fab fa-telegram-plane"></i></a>
+    </div>
+
+
+    <!-- ==========================================
+    MODALS
+    ========================================== -->
+
+    <!-- CHECKOUT -->
+    <div class="modal-overlay hidden" id="modal-checkout">
+        <div class="modal">
+            <div class="modal-head"><i class="fas fa-shopping-cart"></i> Checkout</div>
+            <div class="checkout-box">
+                <div class="row"><span>Item</span><strong id="chk-panel-name">Panel</strong></div>
+                <div class="row"><span>Plan</span><strong id="chk-plan-label" style="color:var(--accent-primary);">Plan</strong></div>
+                <div class="row"><span>Original Price</span><strong>₦<span id="chk-orig-price">0.00</span></strong></div>
+                <div class="checkout-total">
+                    <span>To Pay</span>
+                    <div><span class="strike hidden" id="chk-strike-price">₦0.00</span><span class="total-amount">₦<span id="chk-final-price">0.00</span></span></div>
+                </div>
+            </div>
+            <div class="coupon-section">
+                <div class="coupon-head"><span>Promo Code</span><span class="discount-badge hidden" id="chk-discount-badge">0% OFF</span></div>
+                <div class="coupon-box"><input id="chk-coupon-input" placeholder="Enter code" /><button id="btn-apply-coupon" onclick="applyCouponUI()">Apply</button></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline-modal" onclick="closeModal('modal-checkout')">Cancel</button>
+                <button class="btn btn-primary-modal" id="btn-confirm-pay" onclick="executePurchase()">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER PLACED -->
+    <div class="modal-overlay hidden modal-order-placed" id="modal-order-placed">
+        <div class="modal" style="text-align:center;padding:36px 32px 32px;">
+            <div class="order-success-icon"><span class="ring-pulse"></span><span class="ring-pulse"></span><i class="fas fa-clock"></i></div>
+            <h2 class="order-title">Order <span>Placed!</span></h2>
+            <p class="order-subtitle">Your order is now <strong>pending</strong>.</p>
+            <div class="order-message"><i class="fas fa-shield-alt"></i> Our team will review and approve it shortly.<br />You'll get your key once approved.</div>
+            <div class="order-actions">
+                <button class="btn-order-primary" onclick="closeModal('modal-order-placed');navigate('orders');"><i class="fas fa-clipboard-list"></i> View Orders</button>
+                <button class="btn-order-secondary" onclick="closeModal('modal-order-placed')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="modal-overlay hidden" id="modal-success">
+        <div class="modal" style="text-align:center;">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2 style="font-size:22px;font-weight:800;margin-bottom:4px;">Key Delivered!</h2>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">Your order has been approved. Here's your license key.</p>
+            <div class="key-display"><span class="key-label">License Key</span><div class="key-value" id="modal-key-display">XXXXXX</div></div>
+            <div class="action-row">
+                <button class="btn btn-primary-modal" id="modal-btn-access"><i class="fas fa-download"></i> Access Tool</button>
+                <button class="btn btn-outline-modal" onclick="copyToClipboard('modal-key-display','License Key')"><i class="fas fa-copy"></i> Copy</button>
+                <button class="btn btn-outline-modal" onclick="closeModal('modal-success')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPIN RESULT -->
+    <div class="modal-overlay hidden" id="modal-spin-result">
+        <div class="modal spin-reward-modal" style="text-align:center;">
+            <i class="fas fa-gift" style="font-size:48px;color:var(--accent-primary);display:block;margin-bottom:8px;"></i>
+            <h2 style="font-size:22px;font-weight:800;margin-bottom:4px;" id="spin-result-title">🎉 You Won!</h2>
+            <div class="reward-amount" id="spin-reward-amount">₦10</div>
+            <div class="reward-label" id="spin-reward-label">Added to your wallet</div>
+            <div style="margin-top:20px;"><button class="btn btn-primary-modal" onclick="closeModal('modal-spin-result')" style="padding:12px 40px;">Awesome!</button></div>
+        </div>
+    </div>
+
+    <!-- THEME PICKER -->
+    <div class="modal-overlay hidden" id="modal-theme-picker">
+        <div class="modal">
+            <div class="modal-head"><i class="fas fa-palette"></i> Customize Theme</div>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:6px;">Choose your accent color. The theme will be saved to your account.</p>
+            <div class="theme-picker-grid" id="theme-picker-grid">
+                <!-- populated by JS -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary-modal" onclick="closeModal('modal-theme-picker')">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RATING MODAL -->
+    <div class="modal-overlay hidden" id="modal-rating">
+        <div class="modal" style="text-align:center;">
+            <div class="modal-head" style="justify-content:center;"><i class="fas fa-star" style="color:var(--accent-primary);"></i> Rate This Panel</div>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:4px;" id="rating-panel-name">Panel Name</p>
+            <div class="rating-stars" id="rating-stars">
+                <span class="star" data-val="1">★</span>
+                <span class="star" data-val="2">★</span>
+                <span class="star" data-val="3">★</span>
+                <span class="star" data-val="4">★</span>
+                <span class="star" data-val="5">★</span>
+            </div>
+            <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;" id="rating-label">Tap a star to rate</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline-modal" onclick="closeModal('modal-rating')">Cancel</button>
+                <button class="btn btn-primary-modal" id="btn-submit-rating">Submit Rating</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VERIFY TO UNLOCK (join → share → code) — gates the sensi generation itself for free accounts -->
+    <div class="modal-overlay hidden" id="modal-verify">
+        <div class="modal">
+            <div class="modal-head"><i class="fas fa-shield-alt"></i> Verify to generate your sensitivity</div>
+            <p style="color:var(--text-secondary);font-size:13px;margin-bottom:14px;">Required once per generation before your results are calculated. VIP members skip this entirely.</p>
+            <div style="height:6px;border-radius:6px;background:var(--bg-input);overflow:hidden;margin-bottom:14px;">
+                <div id="verify-progress-bar" style="height:100%;width:15%;background:linear-gradient(90deg,var(--accent-primary),var(--accent-primary-light));transition:width .3s ease;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:11px;font-weight:700;color:var(--text-muted);">
+                <span class="pstep active">1. JOIN</span><span class="pstep">2. SHARE</span><span class="pstep">3. CODE</span>
+            </div>
+
+            <div id="verify-step-1">
+                <p style="font-size:13px;font-weight:700;margin-bottom:8px;">Step 1 — Join the required channels</p>
+                <p style="color:var(--text-secondary);font-size:12.5px;margin-bottom:12px;">The verification code is posted in both. Tap each to join, then tap Verify.</p>
+                <a href="#" id="verify-channel-1" target="_blank" class="verify-channel-row">
+                    <i class="fab fa-whatsapp"></i>
+                    <span id="verify-channel-1-name">WhatsApp Channel</span>
+                    <i class="fas fa-check verify-channel-check" id="verify-channel-1-check"></i>
+                </a>
+                <a href="#" id="verify-channel-2" target="_blank" class="verify-channel-row">
+                    <i class="fab fa-telegram-plane"></i>
+                    <span id="verify-channel-2-name">Telegram Channel</span>
+                    <i class="fas fa-check verify-channel-check" id="verify-channel-2-check"></i>
+                </a>
+                <button class="btn btn-primary-modal" id="verify-btn-joined" style="width:100%;margin-top:6px;" disabled>Verify</button>
+            </div>
+
+            <div id="verify-step-2" class="hidden">
+                <p style="font-size:13px;font-weight:700;margin-bottom:8px;">Step 2 — Share the invite</p>
+                <p style="color:var(--text-secondary);font-size:12.5px;margin-bottom:10px;">Share it <strong id="verify-share-count" style="color:var(--accent-primary);">5</strong> times with friends or groups.</p>
+                <div style="text-align:center;font-weight:800;font-size:18px;margin-bottom:12px;" id="verify-share-counter">0 / 5</div>
+                <button class="btn btn-primary-modal" id="verify-btn-share" style="width:100%;"><i class="fab fa-whatsapp"></i> Share now</button>
+                <button class="btn btn-outline-modal" id="verify-btn-back-2" style="width:100%;margin-top:8px;"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+
+            <div id="verify-step-3" class="hidden">
+                <p style="font-size:13px;font-weight:700;margin-bottom:8px;">Step 3 — Enter the verification code</p>
+                <label for="verify-code-input" style="display:block;font-size:11.5px;font-weight:700;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px;">Verification Code</label>
+                <input type="text" class="form-input" id="verify-code-input" placeholder="Enter verification code" maxlength="30" autocomplete="off" style="margin-bottom:8px;" />
+                <p style="color:var(--text-muted);font-size:11.5px;margin-bottom:10px;">You have three attempts. After the third wrong code this device is restricted.</p>
+                <p id="verify-code-msg" style="color:var(--accent-primary);font-size:12.5px;min-height:16px;margin-bottom:8px;"></p>
+                <button class="btn btn-primary-modal" id="verify-btn-submit" style="width:100%;">Verify &amp; Continue</button>
+                <button class="btn btn-outline-modal" id="verify-btn-back-3" style="width:100%;margin-top:8px;"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+
+            <div id="verify-step-success" class="hidden" style="text-align:center;padding:8px 0 4px;">
+                <div style="width:56px;height:56px;border-radius:50%;background:rgba(52,211,153,0.14);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+                    <i class="fas fa-check" style="font-size:24px;color:var(--accent-green);"></i>
+                </div>
+                <p style="font-size:15px;font-weight:800;margin-bottom:4px;">Verified!</p>
+                <p style="color:var(--text-secondary);font-size:12.5px;">Thanks for joining — continuing now…</p>
+            </div>
+
+            <div class="modal-actions" id="verify-modal-actions">
+                <button class="btn btn-outline-modal" onclick="closeModal('modal-verify')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCOUNT RESTRICTED (ban + appeal) -->
+    <div class="modal-overlay hidden" id="modal-banned">
+        <div class="modal" style="text-align:center;">
+            <i class="fas fa-ban" style="font-size:44px;color:var(--accent-primary);display:block;margin-bottom:10px;"></i>
+            <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">Account Restricted</h2>
+            <p style="color:var(--text-secondary);font-size:13px;margin-bottom:16px;">Your account has been restricted from ZERX-XIT.</p>
+            <div style="text-align:left;background:var(--bg-input);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:13px;">
+                <div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">Reason</span><strong id="ban-reason">—</strong></div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">ZERX ID</span><strong id="ban-zerx-id" style="color:var(--accent-primary);font-family:monospace;">—</strong></div>
+                <div style="display:flex;justify-content:space-between;padding:4px 0;"><span style="color:var(--text-muted);">Date</span><strong id="ban-date">—</strong></div>
+            </div>
+            <p style="color:var(--text-secondary);font-size:12.5px;margin-bottom:8px;text-align:left;">Believe this was a mistake? Explain briefly and submit an appeal for admin review.</p>
+            <textarea id="ban-appeal-message" class="form-input" rows="3" placeholder="Why should this be reconsidered?" style="width:100%;resize:vertical;margin-bottom:12px;"></textarea>
+            <p id="ban-appeal-msg" style="color:var(--accent-green,#34d399);font-size:12.5px;min-height:16px;margin-bottom:6px;"></p>
+            <div class="modal-actions">
+                <button class="btn btn-outline-modal" id="ban-btn-signout">Sign out</button>
+                <button class="btn btn-primary-modal" id="ban-btn-appeal"><i class="fas fa-paper-plane"></i> Submit appeal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    FIREBASE + APP LOGIC (FIXED — now uses downloadLink)
+    ========================================== -->
+    <script type="module" src="js/user.js"></script>
+</body>
+</html>

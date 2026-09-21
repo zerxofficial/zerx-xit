@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: zerx-xit
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false
+      - key: FIREBASE_DATABASE_URL
+        value: https://zerx-store-bd8f0-default-rtdb.firebaseio.com
