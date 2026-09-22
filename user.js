@@ -1826,16 +1826,16 @@
         }
 
         // Calls this same origin's /api/generateSensi (see server.js — the
-        // Render/Express backend). The Gemini key is never present in this
+        // Render/Express backend). The Groq key is never present in this
         // file or any browser-visible code — it lives only in the server's
-        // GEMINI_API_KEY environment variable, exactly as required. Only
+        // GROQ_API_KEY environment variable, exactly as required. Only
         // override this if your API lives at a different origin (e.g. a
         // separate Firebase Cloud Function URL from functions/README.md).
         const SENSI_AI_ENDPOINT = '/api/generateSensi';
 
         // Returns { success, source, value, message, offlineFallback }.
         // Never fabricates a result itself — that decision belongs to the
-        // backend, which knows whether Gemini is even configured. This
+        // backend, which knows whether Groq is even configured. This
         // function just relays what the backend honestly reported.
         async function sensiCallAI(deviceInfo, style, existing, feedback) {
             const controller = new AbortController();
@@ -1880,17 +1880,17 @@
             const response = await sensiCallAI(deviceInfo, sensiState.style, null, feel ? `Currently feels ${feel}` : null);
 
             let result, source;
-            if (response && response.success && response.source === 'gemini') {
+            if (response && response.success && response.source === 'groq') {
                 // Real, validated AI output — use it verbatim, nothing merged in.
                 result = { ...response };
-                source = 'gemini';
+                source = 'groq';
             } else if (response && response.success && response.source === 'offline') {
-                // Server's own hardware-aware offline model (Gemini not configured
+                // Server's own hardware-aware offline model (Groq not configured
                 // on this deployment) — a real calculation, just not AI-generated.
                 result = { ...response };
                 source = 'offline';
             } else if (response && response.offlineFallback) {
-                // Gemini WAS configured but failed validation twice in a row.
+                // Groq WAS configured but failed validation twice in a row.
                 // Say so plainly rather than quietly presenting this as AI.
                 showToast(response.message || 'AI generation failed — showing an offline estimate instead.', 'error');
                 result = { ...response.offlineFallback, play_style: response.play_style };
@@ -1907,7 +1907,7 @@
             result.play_style = sensiState.style;
             result.extended_ram = extRam;
             result.source = source;
-            result.ai_powered = source === 'gemini';
+            result.ai_powered = source === 'groq';
             sensiState.lastResult = result;
             sensiState.lastDeviceInfo = deviceInfo;
             sensiRenderResult(deviceInfo, result);
@@ -1954,8 +1954,8 @@
             const aiBadge = document.getElementById('sensi-r-ai-badge');
             const offlineBadge = document.getElementById('sensi-r-offline-badge');
             const sourceNote = document.getElementById('sensi-r-source-note');
-            if (aiBadge) aiBadge.style.display = result.source === 'gemini' ? 'inline-flex' : 'none';
-            if (offlineBadge) offlineBadge.style.display = result.source !== 'gemini' ? 'inline-flex' : 'none';
+            if (aiBadge) aiBadge.style.display = result.source === 'groq' ? 'inline-flex' : 'none';
+            if (offlineBadge) offlineBadge.style.display = result.source !== 'groq' ? 'inline-flex' : 'none';
             if (sourceNote) {
                 if (result.source === 'local') {
                     sourceNote.textContent = 'Calculated on this device — the generation server couldn\'t be reached.';
@@ -4193,5 +4193,5 @@
         console.log("✅ ZERX-XIT User Panel — DOWNLOAD LINK FIXED!");
         console.log("💡 Orders now use 'downloadLink' field from admin approval.");
         console.log("💡 Access button opens the link set by admin during order approval.");
-        console.log("🔑 Gemini: configured entirely server-side via GEMINI_API_KEY on Render — " +
-            "check /healthz's geminiConfigured field, or just try Generate and watch the result's source.");
+        console.log("🔑 Groq: configured entirely server-side via GROQ_API_KEY on Render — " +
+            "check /healthz's groqConfigured field, or just try Generate and watch the result's source.");

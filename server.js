@@ -7,7 +7,7 @@
  *
  *   1. Serves the static site (hosting/user.html, admin.html, diagnostic.html)
  *   2. Exposes /api/generateSensi and /api/verifyZerxCode — the two routes
- *      that need a real server, because they touch secrets (the Gemini key,
+ *      that need a real server, because they touch secrets (the Groq key,
  *      and the admin's verification code) that must never reach the browser.
  *
  * Nothing else about the app changes: Firebase Auth + the Realtime Database
@@ -19,10 +19,10 @@
  * Required environment variables (set these in the Render dashboard under
  * your service → Environment — see DEPLOY-RENDER.md):
  *
- *   GEMINI_API_KEY              Your Gemini API key. Without it, the sensi
- *                                generator silently uses the offline
- *                                deterministic calculator (same as before).
- *   GEMINI_MODEL                 Optional, defaults to gemini-1.5-flash.
+ *   GROQ_API_KEY                 Your Groq API key (console.groq.com). Without
+ *                                it, the sensi generator silently uses the
+ *                                offline deterministic calculator (same as before).
+ *   GROQ_MODEL                   Optional, defaults to llama-3.3-70b-versatile.
  *   FIREBASE_SERVICE_ACCOUNT     The full JSON content of a Firebase service
  *                                account key (Firebase Console → Project
  *                                Settings → Service accounts → Generate new
@@ -149,23 +149,28 @@ function buildPrompt(device, style, existing, feedback, correction) {
     return lines.join('\n');
 }
 
-async function callGemini(apiKey, model, prompt) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+async function callGroq(apiKey, model, prompt) {
+    const url = 'https://api.groq.com/openai/v1/chat/completions';
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
     try {
         const res = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { temperature: 0.5, maxOutputTokens: 300 }
+                model,
+                messages: [{ role: 'user', content: prompt }],
+                temperature: 0.5,
+                max_tokens: 300
             }),
             signal: controller.signal
         });
-        if (!res.ok) throw new Error('Gemini HTTP ' + res.status);
+        if (!res.ok) throw new Error('Groq HTTP ' + res.status);
         const data = await res.json();
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        const text = data?.choices?.[0]?.message?.content || '';
         const cleaned = text.replace(/```json|```/g, '').trim();
         return JSON.parse(cleaned);
     } finally {
@@ -177,7 +182,7 @@ async function callGemini(apiKey, model, prompt) {
 // { ok: false, reason } — the reason is fed back into the correction
 // prompt on retry, and surfaced (generically) in the error response if
 // both attempts fail, so this is never a silent pass-through.
-function validateGeminiOutput(raw, device) {
+function validateAiOutput(raw, device) {
     if (!raw || typeof raw !== 'object') return { ok: false, reason: 'response was not valid JSON' };
 
     const isIOS = String(device.android_version || device.os || '').toLowerCase().includes('ios') ||
@@ -226,29 +231,29 @@ function validateGeminiOutput(raw, device) {
     return { ok: true, value: out };
 }
 
-// Tries Gemini up to twice (second attempt includes a correction prompt
+// Tries Groq up to twice (second attempt includes a correction prompt
 // naming exactly what was wrong with the first). Never fabricates a
 // result on failure — the caller decides what to show when this returns
 // null, and it always knows *why* via the returned reason.
-async function generateWithGemini(apiKey, model, device, style, existing, feedback) {
+async function generateWithGroq(apiKey, model, device, style, existing, feedback) {
     let lastReason = null;
     for (let attempt = 0; attempt < 2; attempt++) {
         if (attempt > 0) {
-            // Brief backoff before retrying — gives a transient Gemini
+            // Brief backoff before retrying — gives a transient Groq
             // 503 (server overloaded) a moment to clear instead of
             // hitting the same busy endpoint again immediately.
             await new Promise(r => setTimeout(r, 1500));
         }
         try {
             const prompt = buildPrompt(device, style, existing, feedback, lastReason);
-            const raw = await callGemini(apiKey, model, prompt);
-            const validated = validateGeminiOutput(raw, device);
+            const raw = await callGroq(apiKey, model, prompt);
+            const validated = validateAiOutput(raw, device);
             if (validated.ok) return { value: validated.value, reason: null };
             lastReason = validated.reason;
-            console.warn(`Gemini attempt ${attempt + 1} rejected: ${validated.reason}`);
+            console.warn(`Groq attempt ${attempt + 1} rejected: ${validated.reason}`);
         } catch (e) {
             lastReason = 'the AI service did not respond correctly (' + e.message + ')';
-            console.error(`Gemini attempt ${attempt + 1} failed:`, e.message);
+            console.error(`Groq attempt ${attempt + 1} failed:`, e.message);
         }
     }
     return { value: null, reason: lastReason };
@@ -266,8 +271,8 @@ app.post('/api/generateSensi', async (req, res) => {
         return;
     }
 
-    const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
-    const apiKey = process.env.GEMINI_API_KEY;
+    const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+    const apiKey = process.env.GROQ_API_KEY;
 
     // No key configured at all — this is an intentional, honestly-labeled
     // mode, not a failure. The offline calculator is a real hardware-aware
@@ -276,23 +281,23 @@ app.post('/api/generateSensi', async (req, res) => {
         const det = deterministicFallback(device, style);
         res.status(200).json({
             success: true, source: 'offline', play_style: style,
-            ...det, reasoning: 'Calculated from device hardware profile using the offline model (Gemini not configured).'
+            ...det, reasoning: 'Calculated from device hardware profile using the offline model (Groq not configured).'
         });
         return;
     }
 
     // A key IS configured, so the user is expecting real AI generation.
-    // Try Gemini (with one corrective retry on invalid output). If it still
+    // Try Groq (with one corrective retry on invalid output). If it still
     // can't produce a valid result, say so honestly — do NOT quietly swap
     // in the offline calculator and call it AI.
-    const { value, reason } = await generateWithGemini(apiKey, model, device, style, existing, feedback);
+    const { value, reason } = await generateWithGroq(apiKey, model, device, style, existing, feedback);
 
     if (value) {
-        res.status(200).json({ success: true, source: 'gemini', play_style: style, ...value });
+        res.status(200).json({ success: true, source: 'groq', play_style: style, ...value });
         return;
     }
 
-    console.error('generateSensi: Gemini failed after retry —', reason);
+    console.error('generateSensi: Groq failed after retry —', reason);
     const det = deterministicFallback(device, style);
     res.status(200).json({
         success: false,
@@ -381,7 +386,7 @@ app.post('/api/verifyZerxCode', async (req, res) => {
 // Simple health check — useful for confirming the Render deploy is alive.
 app.get('/healthz', (req, res) => res.status(200).json({
     ok: true,
-    geminiConfigured: !!process.env.GEMINI_API_KEY,
+    groqConfigured: !!process.env.GROQ_API_KEY,
     verificationDbConfigured: !!adminDb
 }));
 
