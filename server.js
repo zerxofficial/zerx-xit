@@ -152,7 +152,7 @@ function buildPrompt(device, style, existing, feedback, correction) {
 async function callGemini(apiKey, model, prompt) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 9000);
+    const timeout = setTimeout(() => controller.abort(), 20000);
     try {
         const res = await fetch(url, {
             method: 'POST',
@@ -233,6 +233,12 @@ function validateGeminiOutput(raw, device) {
 async function generateWithGemini(apiKey, model, device, style, existing, feedback) {
     let lastReason = null;
     for (let attempt = 0; attempt < 2; attempt++) {
+        if (attempt > 0) {
+            // Brief backoff before retrying — gives a transient Gemini
+            // 503 (server overloaded) a moment to clear instead of
+            // hitting the same busy endpoint again immediately.
+            await new Promise(r => setTimeout(r, 1500));
+        }
         try {
             const prompt = buildPrompt(device, style, existing, feedback, lastReason);
             const raw = await callGemini(apiKey, model, prompt);

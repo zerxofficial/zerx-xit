@@ -1839,7 +1839,7 @@
         // function just relays what the backend honestly reported.
         async function sensiCallAI(deviceInfo, style, existing, feedback) {
             const controller = new AbortController();
-            const t = setTimeout(() => controller.abort(), 12000); // backend allows one retry, so give it room
+            const t = setTimeout(() => controller.abort(), 45000); // backend allows one retry (20s each) + backoff, so give it room
             try {
                 const res = await fetch(SENSI_AI_ENDPOINT, {
                     method: 'POST',
