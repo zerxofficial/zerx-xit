@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <title>ZERX-XIT ADMIN</title>
+    <meta name="description" content="ZERX-XIT Admin Panel — manage users, orders, referrals and store settings." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23ef4136'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial,sans-serif' font-weight='900' fill='%23fff' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- ANIMATION CONTAINER -->
+    <div class="anim-container" id="anim-container">
+        <canvas id="anim-canvas"></canvas>
+    </div>
+
+    <!-- BG GLOW -->
+    <div class="bg-glow">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- SECURITY OVERLAY -->
+    <div id="security-overlay">
+        <div class="shield-wrap">
+            <div class="shield-ring"></div>
+            <div class="shield-ring"></div>
+            <div class="shield-icon"><i class="fas fa-shield-alt"></i></div>
+        </div>
+        <div class="security-title">Securing Connection</div>
+        <div class="security-progress"><div class="bar" id="security-bar"></div></div>
+        <div class="security-status" id="security-status">Initializing security protocols...</div>
+        <div class="security-dots">
+            <span id="dot1"></span><span id="dot2"></span><span id="dot3"></span><span id="dot4"></span>
+        </div>
+        <div class="security-checkmark" id="security-check"><i class="fas fa-check-circle"></i></div>
+    </div>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="28" />
+            </svg>
+        </div>
+        <div class="loader-text">Loading</div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast-container"></div>
+
+    <!-- ===== AUTH SCREEN ===== -->
+    <div id="auth-screen">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="brand">
+                    <div class="logo-icon"><span class="logo-fallback">ZX</span></div>
+                    <h1>ADMIN <span>PANEL</span></h1>
+                    <p>Secure access for ZERX-XIT</p>
+                </div>
+                <div class="input-group">
+                    <input id="admin-email" placeholder="Email address" type="email" />
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input id="admin-pass" placeholder="Password" type="password" />
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <button class="btn-auth" id="btn-login"><span><i class="fas fa-arrow-right"></i> Login</span></button>
+                <p style="text-align:center;margin-top:16px;"><a href="diagnostic.html" target="_blank" style="font-size:11.5px;color:var(--text-muted);text-decoration:none;"><i class="fas fa-signal" style="margin-right:4px;"></i>Trouble signing in? Run connection check</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div id="main-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand-container">
+                <div class="brand">
+                    <div class="brand-icon">ZX</div>
+                    <span>ADMIN</span>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-label">Main</li>
+                <li class="nav-item active" data-target="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li class="nav-item" data-target="add-panel"><i class="fas fa-plus-circle"></i> Add Panel</li>
+                <li class="nav-item" data-target="manage-panels"><i class="fas fa-box"></i> Manage Panels</li>
+
+                <li class="nav-label" style="margin-top:12px;">Finance</li>
+                <li class="nav-item" data-target="deposits"><i class="fas fa-hand-holding-usd"></i> Deposits</li>
+                <li class="nav-item" data-target="orders"><i class="fas fa-shopping-cart"></i> Orders</li>
+                <li class="nav-item" data-target="users"><i class="fas fa-users"></i> Users</li>
+
+                <li class="nav-label" style="margin-top:12px;">Moderation</li>
+                <li class="nav-item" data-target="verification"><i class="fas fa-shield-alt"></i> Verification</li>
+                <li class="nav-item" data-target="appeals"><i class="fas fa-gavel"></i> Appeals</li>
+                <li class="nav-item" data-target="devices"><i class="fas fa-mobile-alt"></i> Devices</li>
+
+                <li class="nav-label" style="margin-top:12px;">Marketing</li>
+                <li class="nav-item" data-target="promotions"><i class="fas fa-bullhorn"></i> Promotions</li>
+                <li class="nav-item" data-target="coupons"><i class="fas fa-ticket"></i> Coupons</li>
+                <li class="nav-item" data-target="referrals"><i class="fas fa-user-friends"></i> Referrals</li>
+
+                <li class="nav-label" style="margin-top:12px;">User Features Control</li>
+                <li class="nav-item" data-target="theme-control"><i class="fas fa-sun"></i> Theme Control</li>
+                <li class="nav-item" data-target="category-control"><i class="fas fa-tags"></i> Categories</li>
+                <li class="nav-item" data-target="notification-control"><i class="fas fa-bell"></i> Notifications</li>
+                <li class="nav-item" data-target="rating-control"><i class="fas fa-star"></i> Ratings</li>
+                <li class="nav-item" data-target="analytics"><i class="fas fa-chart-pie"></i> Analytics</li>
+                <li class="nav-item" data-target="sensi"><i class="fas fa-crosshairs"></i> Sensi Generator</li>
+
+                <li class="nav-label" style="margin-top:12px;">Settings</li>
+                <li class="nav-item" data-target="payment"><i class="fas fa-qrcode"></i> Payment Settings</li>
+                <li class="nav-item" data-target="support"><i class="fas fa-headset"></i> Support Links</li>
+                <li class="nav-item" data-target="branding"><i class="fas fa-image"></i> Branding</li>
+                <li class="nav-item" data-target="animations"><i class="fas fa-film"></i> Animations</li>
+
+                <li class="nav-item danger" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </aside>
+
+        <!-- MAIN WRAPPER -->
+        <div class="main-wrapper">
+
+            <!-- HEADER -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                    <h2 class="page-title" id="page-title">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <button class="notif-btn" id="notif-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-dot" id="notif-badge" style="display:none;">0</span>
+                    </button>
+                    <div class="avatar">AD</div>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="content">
+
+                <!-- ===== DASHBOARD ===== -->
+                <section class="page-section" id="sec-dashboard">
+                    <div id="dashboard-error">
+                        <i class="fas fa-exclamation-triangle"></i> <span id="error-message">Loading data...</span>
+                        <button class="retry-btn" onclick="retryDashboard()"><i class="fas fa-sync-alt"></i> Retry</button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info"><p>Revenue</p><h3 id="stat-revenue">₦0.00</h3></div>
+                            <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info"><p>Users</p><h3 id="stat-users">0</h3></div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info"><p>Pending Deposits</p><h3 id="stat-pending-deposits">0</h3></div>
+                            <div class="stat-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info"><p>Pending Orders</p><h3 id="stat-pending-orders">0</h3></div>
+                            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-chart-line"></i> Revenue (7d)</h3></div>
+                            <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+                        </div>
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-clock"></i> Recent Activity</h3><span class="text-muted text-xs">Latest updates</span></div>
+                            <div class="activity-list" id="recent-activity"><div style="padding:20px;text-align:center;color:var(--text-muted);">Loading...</div></div>
+                        </div>
+                    </div>
+
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-bolt"></i> Quick Actions</h3></div>
+                        <div class="quick-actions-grid">
+                            <div class="quick-action-btn" onclick="navigate('add-panel')"><span class="qa-icon"><i class="fas fa-plus-circle"></i></span><span class="qa-label">Add Panel</span></div>
+                            <div class="quick-action-btn" onclick="navigate('orders')"><span class="qa-icon"><i class="fas fa-shopping-cart"></i></span><span class="qa-label">View Orders</span></div>
+                            <div class="quick-action-btn" onclick="navigate('deposits')"><span class="qa-icon"><i class="fas fa-hand-holding-usd"></i></span><span class="qa-label">Deposits</span></div>
+                            <div class="quick-action-btn" onclick="navigate('users')"><span class="qa-icon"><i class="fas fa-users"></i></span><span class="qa-label">Users</span></div>
+                            <div class="quick-action-btn" onclick="navigate('promotions')"><span class="qa-icon"><i class="fas fa-bullhorn"></i></span><span class="qa-label">Promotions</span></div>
+                            <div class="quick-action-btn" onclick="navigate('coupons')"><span class="qa-icon"><i class="fas fa-ticket"></i></span><span class="qa-label">Coupons</span></div>
+                            <div class="quick-action-btn" onclick="navigate('notification-control')"><span class="qa-icon"><i class="fas fa-bell"></i></span><span class="qa-label">Send Notification</span></div>
+                            <div class="quick-action-btn" onclick="navigate('theme-control')"><span class="qa-icon"><i class="fas fa-sun"></i></span><span class="qa-label">Theme Control</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== ADD PANEL ===== -->
+                <section class="page-section hidden" id="sec-add-panel">
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-plus-circle"></i> Add New Panel</h3></div>
+                        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:28px;">
+                            <div>
+                                <div class="form-group"><label>Panel Name *</label><input id="add-p-name" class="form-input" placeholder="VIP Injector Pro" /></div>
+                                <div class="form-group"><label>Banner Image URL (replaces video)</label><input id="add-p-banner" class="form-input" placeholder="https://example.com/banner.jpg" /></div>
+                                <div class="form-group"><label>Injector Logo URL</label><input id="add-p-logo" class="form-input" placeholder="https://example.com/logo.png" /></div>
+                                <div class="form-group"><label>Category</label>
+                                    <select id="add-p-category" class="form-select">
+                                        <option value="all">All</option>
+                                        <option value="mods">Mods</option>
+                                        <option value="tools">Tools</option>
+                                        <option value="vip">VIP</option>
+                                        <option value="scripts">Scripts</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>YouTube Video Link (optional)</label><input id="add-p-yt" class="form-input" placeholder="https://youtube.com/watch?v=..." /></div>
+                                <div class="form-group"><label>Update File Link *</label><input id="add-p-link" class="form-input" placeholder="https://t.me/..." /></div>
+                                <div class="form-group"><label>Feedback Link</label><input id="add-p-feedback" class="form-input" placeholder="https://t.me/..." /></div>
+                                <div class="form-group"><label>Description</label><textarea id="add-p-desc" class="form-input" rows="3" placeholder="- Aimbot&#10;- Auto Headshot"></textarea></div>
+                            </div>
+                            <div>
+                                <div style="background:var(--bg-input);padding:18px;border-radius:var(--radius-sm);border:1px solid var(--border-color);margin-bottom:20px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                                        <span style="font-weight:600;"><i class="fas fa-tags" style="color:var(--accent-yellow);"></i> Pricing Plans</span>
+                                        <button class="btn btn-primary btn-sm" id="btn-add-plan-row"><i class="fas fa-plus"></i> Plan</button>
+                                    </div>
+                                    <div id="plans-container">
+                                        <div class="plan-row">
+                                            <input class="p-label form-input" placeholder="Plan Name" value="30 Days" />
+                                            <input class="p-price form-input" placeholder="Price" type="number" value="200" />
+                                            <button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();updateLivePreview();"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block" id="btn-submit-panel"><i class="fas fa-cloud-upload-alt"></i> Publish Panel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-eye"></i> Live Preview</h3></div>
+                        <div id="live-preview-container"><div style="padding:20px;text-align:center;color:var(--text-muted);">Fill in the details above to see preview</div></div>
+                    </div>
+                </section>
+
+                <!-- ===== MANAGE PANELS ===== -->
+                <section class="page-section hidden" id="sec-manage-panels">
+                    <div class="flex-between flex-wrap" style="margin-bottom:20px;gap:10px;">
+                        <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-box" style="color:var(--accent-yellow);"></i> All Panels</h3>
+                        <button class="btn btn-outline btn-sm" onclick="loadSection('manage-panels')"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    </div>
+                    <div class="panel-grid-admin" id="admin-panels-container">
+                        <div style="padding:40px;text-align:center;color:var(--text-muted);">Loading panels...</div>
+                    </div>
+                </section>
+
+                <!-- ===== DEPOSITS ===== -->
+                <section class="page-section hidden" id="sec-deposits">
+                    <div class="table-container">
+                        <div class="table-header-controls">
+                            <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-hand-holding-usd" style="color:var(--accent-green);"></i> Manual Deposits</h3>
+                            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="loadSection('deposits')"><i class="fas fa-sync-alt"></i></button>
+                                <div class="search-box"><i class="fas fa-search"></i><input id="search-deposits" placeholder="Search email, UTR..." /></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Date</th><th>User</th><th>Amount</th><th>UTR</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody id="deposits-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== ORDERS ===== -->
+                <section class="page-section hidden" id="sec-orders">
+                    <div class="table-container">
+                        <div class="table-header-controls">
+                            <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-shopping-cart" style="color:var(--accent-yellow);"></i> Orders</h3>
+                            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="loadSection('orders')"><i class="fas fa-sync-alt"></i></button>
+                                <button class="btn btn-outline btn-sm" id="btn-export-orders" title="Export orders as CSV"><i class="fas fa-file-csv"></i> Export CSV</button>
+                                <div class="search-box"><i class="fas fa-search"></i><input id="search-orders" placeholder="Search email, panel..." /></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Date</th><th>User</th><th>Panel / Plan</th><th>Amount</th><th>Status</th><th>Download Link</th><th>Action</th></tr></thead>
+                                <tbody id="orders-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== USERS ===== -->
+                <section class="page-section hidden" id="sec-users">
+                    <div class="table-container">
+                        <div class="table-header-controls">
+                            <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-users" style="color:var(--accent-yellow);"></i> Users</h3>
+                            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="loadSection('users')"><i class="fas fa-sync-alt"></i></button>
+                                <button class="btn btn-outline btn-sm" id="btn-export-users" title="Export users as CSV"><i class="fas fa-file-csv"></i> Export CSV</button>
+                                <div class="search-box"><i class="fas fa-search"></i><input id="search-users" placeholder="Search email..." /></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Joined</th><th>User</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody id="users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== VERIFICATION ===== -->
+                <section class="page-section hidden" id="sec-verification">
+                    <div class="section-box" style="max-width:600px;margin:0 auto;">
+                        <div class="box-header"><h3><i class="fas fa-shield-alt" style="color:var(--accent-primary);"></i> Verification Gate</h3></div>
+                        <p style="color:var(--text-muted);font-size:12.5px;margin-bottom:14px;">Free users must join, share and enter this code before every generation to unlock the deeper XIT tips. VIP skips this entirely. Join links come from <strong>Support Links</strong> (WhatsApp Channel / Telegram Login).</p>
+                        <div class="form-group"><label>Required shares</label><input id="verify-share-count-input" type="number" min="1" class="form-input" placeholder="5" /></div>
+                        <div class="form-group"><label>Verification code</label><input id="verify-code-setting" class="form-input" style="text-transform:uppercase;" placeholder="ZERX FOR 2027" /></div>
+                        <p style="color:var(--text-muted);font-size:11.5px;margin-bottom:12px;">Post this exact code in your WhatsApp/Telegram channels. It's checked server-side by the <code>verifyZerxCode</code> function — never sent to the browser.</p>
+                        <button class="btn btn-primary btn-block" id="btn-save-verification"><i class="fas fa-save"></i> Save Verification Settings</button>
+                    </div>
+                </section>
+
+                <!-- ===== APPEALS ===== -->
+                <section class="page-section hidden" id="sec-appeals">
+                    <div class="table-container">
+                        <div class="table-header-controls">
+                            <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-gavel" style="color:var(--accent-primary);"></i> Ban Appeals</h3>
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('appeals')"><i class="fas fa-sync-alt"></i></button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Date</th><th>User</th><th>ZERX ID</th><th>Reason</th><th>Message</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody id="appeals-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== DEVICES ===== -->
+                <section class="page-section hidden" id="sec-devices">
+                    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:24px;">
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-mobile-alt"></i> Add / Update Device</h3></div>
+                            <p style="color:var(--text-muted);font-size:11.5px;margin-bottom:10px;">Same brand + model overrides the built-in catalogue on the user side — no redeploy needed.</p>
+                            <input type="hidden" id="device-edit-key" value="" />
+                            <div class="form-group"><label>Brand *</label><input id="device-brand" class="form-input" placeholder="Samsung" /></div>
+                            <div class="form-group"><label>Model *</label><input id="device-model" class="form-input" placeholder="Galaxy S25 Ultra" /></div>
+                            <div class="form-group"><label>Processor</label><input id="device-proc" class="form-input" placeholder="Snapdragon 8 Elite" /></div>
+                            <div class="form-group"><label>GPU</label><input id="device-gpu" class="form-input" placeholder="Adreno 830" /></div>
+                            <div class="form-group"><label>RAM</label><input id="device-ram" class="form-input" placeholder="12GB" /></div>
+                            <div class="form-group"><label>OS</label><input id="device-os" class="form-input" placeholder="Android 15" /></div>
+                            <div class="form-group"><label>Refresh Rate</label><input id="device-rr" class="form-input" placeholder="120Hz" /></div>
+                            <div class="form-group"><label>Performance Score (0-100)</label><input id="device-perf" type="number" min="0" max="100" class="form-input" placeholder="95" /></div>
+                            <div class="form-group"><label>Gaming Score (0-100)</label><input id="device-gam" type="number" min="0" max="100" class="form-input" placeholder="97" /></div>
+                            <div style="display:flex;gap:10px;">
+                                <button class="btn btn-primary btn-block" id="btn-save-device"><i class="fas fa-save"></i> Save Device</button>
+                                <button class="btn btn-outline" id="btn-clear-device" title="Clear form"><i class="fas fa-eraser"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-header-controls">
+                                <h3 style="font-weight:700;">Admin-Added Devices</h3>
+                                <div style="display:flex;gap:12px;align-items:center;">
+                                    <button class="btn btn-outline btn-sm" onclick="loadSection('devices')"><i class="fas fa-sync-alt"></i></button>
+                                    <div class="search-box"><i class="fas fa-search"></i><input id="search-devices" placeholder="Search brand, model..." /></div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead><tr><th>Brand</th><th>Model</th><th>Chipset</th><th>Perf</th><th>Action</th></tr></thead>
+                                    <tbody id="devices-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== PROMOTIONS ===== -->
+                <section class="page-section hidden" id="sec-promotions">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-bullhorn"></i> Add Promotion</h3></div>
+                            <div class="form-group"><label>Title *</label><input id="promo-title" class="form-input" placeholder="Diwali Special" /></div>
+                            <div class="form-group"><label>Image URL</label><input id="promo-img" class="form-input" placeholder="https://..." /></div>
+                            <div class="form-group"><label>Redirect Link</label><input id="promo-link" class="form-input" placeholder="https://..." /></div>
+                            <button class="btn btn-primary btn-block" id="btn-add-promo"><i class="fas fa-plus"></i> Publish</button>
+                        </div>
+                        <div class="section-box">
+                            <div class="box-header"><h3>Active Promotions</h3><button class="btn btn-outline btn-sm" onclick="loadSection('promotions')"><i class="fas fa-sync-alt"></i></button></div>
+                            <div id="promotions-list" style="display:flex;flex-direction:column;gap:12px;"><div style="padding:20px;text-align:center;color:var(--text-muted);">Loading...</div></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== COUPONS ===== -->
+                <section class="page-section hidden" id="sec-coupons">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-ticket"></i> Create Coupon</h3></div>
+                            <div class="form-group"><label>Coupon Code</label><input id="coupon-code" class="form-input" style="text-transform:uppercase;" placeholder="SAVE20" /></div>
+                            <div class="form-group"><label>Discount %</label><input id="coupon-discount" class="form-input" type="number" min="1" max="100" placeholder="20" /></div>
+                            <div class="form-group"><label>Max Usage</label><input id="coupon-max" class="form-input" type="number" placeholder="Unlimited" /></div>
+                            <button class="btn btn-primary btn-block" id="btn-add-coupon"><i class="fas fa-plus"></i> Create</button>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-header-controls"><h3>Coupons</h3><button class="btn btn-outline btn-sm" onclick="loadSection('coupons')"><i class="fas fa-sync-alt"></i></button></div>
+                            <div class="table-responsive">
+                                <table>
+                                    <thead><tr><th>Code</th><th>Discount</th><th>Usage</th><th>Status</th><th>Action</th></tr></thead>
+                                    <tbody id="coupons-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== REFERRALS ===== -->
+                <section class="page-section hidden" id="sec-referrals">
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-user-friends"></i> Referral Overview</h3></div>
+                        <div class="referral-stats-card">
+                            <div class="referral-stat-item"><div class="stat-number" id="ref-total">0</div><div class="stat-label">Total Referrals</div></div>
+                            <div class="referral-stat-item"><div class="stat-number" id="ref-active">0</div><div class="stat-label">Active</div></div>
+                            <div class="referral-stat-item"><div class="stat-number" id="ref-earnings">₦0</div><div class="stat-label">Total Earnings</div></div>
+                            <div class="referral-stat-item"><div class="stat-number" id="ref-bonus">50</div><div class="stat-label">Bonus per Referral</div></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Referral Bonus Amount (₦)</label>
+                            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                                <input id="ref-bonus-input" class="form-input referral-bonus-input" type="number" min="1" step="1" placeholder="50" />
+                                <button class="btn btn-primary" id="btn-save-ref-bonus"><i class="fas fa-save"></i> Update Bonus</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header-controls">
+                            <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-list"></i> Referral Events</h3>
+                            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="loadSection('referrals')"><i class="fas fa-sync-alt"></i></button>
+                                <div class="search-box"><i class="fas fa-search"></i><input id="search-ref-events" placeholder="Search email..." /></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Date</th><th>Referrer</th><th>Referred</th><th>Bonus</th><th>Status</th></tr></thead>
+                                <tbody id="ref-events-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== THEME CONTROL ===== -->
+                <section class="page-section hidden" id="sec-theme-control">
+                    <div class="section-box" style="max-width:600px;margin:0 auto;">
+                        <div class="box-header"><h3><i class="fas fa-sun"></i> Theme Control</h3></div>
+                        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:20px;">Force a specific theme for all users, or let them choose themselves.</p>
+                        <div class="form-group">
+                            <label>Default Theme Mode</label>
+                            <select id="theme-mode-select" class="form-select">
+                                <option value="user-choice">🌗 Let users choose</option>
+                                <option value="dark">🌙 Force Dark Mode</option>
+                                <option value="light">☀️ Force Light Mode</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Override User Preference?</label>
+                            <select id="theme-override-select" class="form-select">
+                                <option value="no">No — Respect user's saved choice</option>
+                                <option value="yes">Yes — Override all users</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btn-save-theme-control"><i class="fas fa-save"></i> Save Theme Settings</button>
+                        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> If "Override" is ON, users will see the forced theme even if they changed it earlier.</div>
+                    </div>
+                </section>
+
+                <!-- ===== CATEGORY CONTROL ===== -->
+                <section class="page-section hidden" id="sec-category-control">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-plus-circle"></i> Add Category</h3></div>
+                            <div class="form-group"><label>Category Name</label><input id="new-category-name" class="form-input" placeholder="e.g., Aimbot" /></div>
+                            <button class="btn btn-primary btn-block" id="btn-add-category"><i class="fas fa-plus"></i> Add</button>
+                        </div>
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-tags"></i> Existing Categories</h3><button class="btn btn-outline btn-sm" onclick="loadCategories()"><i class="fas fa-sync-alt"></i></button></div>
+                            <div id="categories-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== NOTIFICATION CONTROL ===== -->
+                <section class="page-section hidden" id="sec-notification-control">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-paper-plane"></i> Send Notification</h3></div>
+                            <div class="form-group"><label>Message *</label><textarea id="notif-message" class="form-input" rows="3" placeholder="Your message here..."></textarea></div>
+                            <div class="form-group"><label>Target Audience</label>
+                                <select id="notif-audience" class="form-select">
+                                    <option value="all">All Users</option>
+                                    <option value="specific">Specific User (Email)</option>
+                                </select>
+                            </div>
+                            <div class="form-group hidden" id="notif-email-group"><label>User Email</label><input id="notif-email" class="form-input" placeholder="user@example.com" /></div>
+                            <button class="btn btn-primary btn-block" id="btn-send-notification"><i class="fas fa-bell"></i> Send Notification</button>
+                        </div>
+                        <div class="section-box">
+                            <div class="box-header"><h3><i class="fas fa-history"></i> Recent Notifications</h3><button class="btn btn-outline btn-sm" onclick="loadRecentNotifications()"><i class="fas fa-sync-alt"></i></button></div>
+                            <div id="recent-notif-list" style="display:flex;flex-direction:column;gap:8px;">
+                                <div style="padding:16px;text-align:center;color:var(--text-muted);">No notifications sent yet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== RATING CONTROL ===== -->
+                <section class="page-section hidden" id="sec-rating-control">
+                    <div class="table-container">
+                        <div class="table-header-controls">
+                            <h3 style="font-weight:700;display:flex;align-items:center;gap:10px;"><i class="fas fa-star" style="color:var(--accent-yellow);"></i> All Ratings</h3>
+                            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                                <button class="btn btn-outline btn-sm" onclick="loadRatings()"><i class="fas fa-sync-alt"></i></button>
+                                <div class="search-box"><i class="fas fa-search"></i><input id="search-ratings" placeholder="Search panel, user..." /></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Panel</th><th>User</th><th>Rating</th><th>Date</th><th>Action</th></tr></thead>
+                                <tbody id="ratings-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== ANALYTICS ===== -->
+                <section class="page-section hidden" id="sec-analytics">
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-info"><p>Total Orders</p><h3 id="ana-total-orders">0</h3></div><div class="stat-icon"><i class="fas fa-shopping-cart"></i></div></div>
+                        <div class="stat-card"><div class="stat-info"><p>Total Revenue</p><h3 id="ana-total-revenue">₦0</h3></div><div class="stat-icon"><i class="fas fa-wallet"></i></div></div>
+                        <div class="stat-card"><div class="stat-info"><p>Avg Order Value</p><h3 id="ana-avg-order">₦0</h3></div><div class="stat-icon"><i class="fas fa-calculator"></i></div></div>
+                        <div class="stat-card"><div class="stat-info"><p>Active Users</p><h3 id="ana-active-users">0</h3></div><div class="stat-icon"><i class="fas fa-user-check"></i></div></div>
+                    </div>
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-chart-bar"></i> Daily Spending (Last 7 Days)</h3></div>
+                        <div class="chart-container" style="height:260px;"><canvas id="spendingChart"></canvas></div>
+                    </div>
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-chart-pie"></i> Revenue by Panel</h3></div>
+                        <div class="chart-container" style="height:260px;"><canvas id="panelRevenueChart"></canvas></div>
+                    </div>
+                </section>
+
+                <!-- ===== SENSI GENERATOR ===== -->
+                <section class="page-section hidden" id="sec-sensi">
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-info"><p>Total Generations</p><h3 id="sensi-total-gens">0</h3></div><div class="stat-icon"><i class="fas fa-crosshairs"></i></div></div>
+                        <div class="stat-card"><div class="stat-info"><p>Unique Devices</p><h3 id="sensi-unique-devices">0</h3></div><div class="stat-icon"><i class="fas fa-mobile-screen-button"></i></div></div>
+                        <div class="stat-card"><div class="stat-info"><p>Top Play Style</p><h3 id="sensi-top-style">—</h3></div><div class="stat-icon"><i class="fas fa-gamepad"></i></div></div>
+                        <div class="stat-card"><div class="stat-info"><p>Avg Device Score</p><h3 id="sensi-avg-score">0</h3></div><div class="stat-icon"><i class="fas fa-gauge-high"></i></div></div>
+                    </div>
+
+                    <div class="section-box" style="max-width:600px;">
+                        <div class="box-header"><h3><i class="fas fa-crown" style="color:var(--accent-yellow);"></i> VIP Settings</h3></div>
+                        <p class="text-xs text-muted" style="margin-bottom:14px;">VIP unlocks the deeper "XIT" phone-optimization tier in the Sensi Generator instantly. Free users can still unlock it per-generation by joining &amp; sharing. Activation is charged directly from the user's wallet balance — no approval queue needed.</p>
+                        <div class="form-group"><label>VIP Price (₦)</label><input id="set-vip-price" class="form-input" type="number" placeholder="2000" /></div>
+                        <button class="btn btn-primary btn-block" id="btn-save-vip-price"><i class="fas fa-save"></i> Save VIP Price</button>
+                        <div style="display:flex;gap:24px;margin-top:16px;">
+                            <div><span class="text-xs text-muted">VIP Users</span><h3 id="vip-user-count" style="margin-top:2px;">0</h3></div>
+                            <div><span class="text-xs text-muted">AI Backend</span><h3 style="margin-top:2px;font-size:12.5px;font-weight:600;color:var(--text-muted);">Set in user.html → SENSI_AI_ENDPOINT (see functions/README.md)</h3></div>
+                        </div>
+                    </div>
+
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-chart-bar"></i> Play Style Breakdown</h3></div>
+                        <div class="chart-container" style="height:240px;"><canvas id="sensiStyleChart"></canvas></div>
+                    </div>
+
+                    <div class="section-box">
+                        <div class="table-header-controls">
+                            <h3>Recent Generations</h3>
+                            <button class="btn btn-outline btn-sm" onclick="loadSection('sensi')"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn btn-outline btn-sm" id="btn-export-sensi" title="Export as CSV"><i class="fas fa-file-csv"></i> Export CSV</button>
+                            <div class="search-box"><i class="fas fa-search"></i><input id="search-sensi" placeholder="Search email, device..." /></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>User</th><th>Device</th><th>Play Style</th><th>General</th><th>DPI</th><th>Score</th><th>Date</th></tr></thead>
+                                <tbody id="sensi-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="section-box">
+                        <div class="box-header"><h3><i class="fas fa-mobile-screen-button"></i> Top Devices</h3></div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead><tr><th>Device</th><th>Generations</th></tr></thead>
+                                <tbody id="sensi-devices-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== PAYMENT SETTINGS ===== -->
+                <section class="page-section hidden" id="sec-payment">
+                    <div class="section-box" style="max-width:600px;margin:0 auto;">
+                        <div class="box-header"><h3><i class="fas fa-hand-holding-usd" style="color:var(--accent-green);"></i> Manual Payment Settings</h3></div>
+                        <div class="form-group"><label>Bank Account Number</label><input id="set-upi" class="form-input" placeholder="Enter bank account number" /></div>
+                        <div class="form-group"><label>QR Image URL</label><input id="set-qr" class="form-input" placeholder="https://..." /></div>
+                        <div id="qr-preview" style="text-align:center;margin-bottom:12px;"></div>
+                        <button class="btn btn-primary btn-block" id="btn-save-payment"><i class="fas fa-save"></i> Save Settings</button>
+                    </div>
+                </section>
+
+                <!-- ===== SUPPORT LINKS ===== -->
+                <section class="page-section hidden" id="sec-support">
+                    <div class="section-box" style="max-width:600px;margin:0 auto;">
+                        <div class="box-header"><h3><i class="fas fa-headset"></i> Support Links</h3></div>
+                        <div class="form-group"><label>WhatsApp Support</label><input id="set-wa" class="form-input" placeholder="https://wa.me/..." /></div>
+                        <div class="form-group"><label>WhatsApp Channel (Login Button)</label><input id="set-wa-channel" class="form-input" placeholder="https://whatsapp.com/channel/..." /></div>
+                        <div class="form-group"><label>Telegram (Login)</label><input id="set-tg-login" class="form-input" placeholder="https://t.me/..." /></div>
+                        <div class="form-group"><label>Telegram (Dashboard)</label><input id="set-tg-dash" class="form-input" placeholder="https://t.me/..." /></div>
+                        <button class="btn btn-primary btn-block" id="btn-save-support"><i class="fas fa-save"></i> Update Links</button>
+                    </div>
+                </section>
+
+                <!-- ===== BRANDING ===== -->
+                <section class="page-section hidden" id="sec-branding">
+                    <div class="section-box" style="max-width:600px;margin:0 auto;">
+                        <div class="box-header"><h3><i class="fas fa-image"></i> Branding</h3></div>
+                        <div class="form-group"><label>Site Name</label><input id="brand-name" class="form-input" placeholder="ZERX-XIT" /></div>
+                        <div class="form-group">
+                            <label>Logo (Upload from gallery)</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="logo-file-input" accept="image/*" />
+                                <button class="btn btn-primary" id="btn-upload-logo"><i class="fas fa-upload"></i> Upload</button>
+                            </div>
+                            <div style="margin-top:10px;">
+                                <img id="logo-preview" src="" alt="Logo Preview" style="display:none;" />
+                                <span id="logo-status" style="font-size:12px;color:var(--text-muted);margin-left:10px;"></span>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button class="btn btn-primary" id="btn-save-branding"><i class="fas fa-save"></i> Update Branding</button>
+                            <button class="btn btn-outline" id="btn-remove-logo"><i class="fas fa-trash"></i> Remove Logo</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== ANIMATIONS ===== -->
+                <section class="page-section hidden" id="sec-animations">
+                    <div class="section-box" style="max-width:600px;margin:0 auto;">
+                        <div class="box-header"><h3><i class="fas fa-film"></i> User Panel Animation</h3></div>
+                        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:20px;">Select the background animation for all users.</p>
+                        <div class="form-group">
+                            <label>Choose Animation</label>
+                            <select id="anim-select" class="form-select">
+                                <option value="aurora">🌌 Aurora Flow</option>
+                                <option value="nebula">🌠 Nebula Stars</option>
+                                <option value="orbs">🌀 Liquid Orbs</option>
+                                <option value="grid">🔲 Geometric Grid</option>
+                                <option value="waves">🌊 Wave Motion</option>
+                                <option value="pulse">⚡ Energy Pulse</option>
+                                <option value="neon">💡 Neon Particles</option>
+                                <option value="static">⏸️ Static</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btn-save-animation"><i class="fas fa-save"></i> Save Animation</button>
+                        <div style="margin-top:12px;font-size:12px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Changes reflect in the user panel instantly.</div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+
+    <!-- EDIT BALANCE -->
+    <div class="modal-overlay hidden" id="modal-balance">
+        <div class="modal">
+            <div class="modal-header"><h3><i class="fas fa-wallet"></i> Edit Balance</h3><button class="close-btn" onclick="closeModal('modal-balance')"><i class="fas fa-times"></i></button></div>
+            <input id="edit-bal-uid" type="hidden" />
+            <div class="form-group"><label>Current Balance</label><input id="edit-bal-current" class="form-input" disabled /></div>
+            <div class="form-group"><label>Action</label><select id="edit-bal-type" class="form-select"><option value="add">Add (+)</option><option value="deduct">Deduct (-)</option><option value="set">Set (=)</option></select></div>
+            <div class="form-group"><label>Amount</label><input id="edit-bal-amount" class="form-input" type="number" placeholder="0" /></div>
+            <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-balance')">Cancel</button><button class="btn btn-primary" id="btn-save-balance">Update</button></div>
+        </div>
+    </div>
+
+    <!-- EDIT PANEL -->
+    <div class="modal-overlay hidden" id="modal-edit-panel">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Panel</h3><button class="close-btn" onclick="closeModal('modal-edit-panel')"><i class="fas fa-times"></i></button></div>
+            <input id="edit-p-id" type="hidden" />
+            <div class="form-group"><label>Name</label><input id="edit-p-name" class="form-input" /></div>
+            <div class="form-group"><label>Banner Image URL</label><input id="edit-p-banner" class="form-input" placeholder="https://..." /></div>
+            <div class="form-group"><label>Injector Logo URL</label><input id="edit-p-logo" class="form-input" placeholder="https://..." /></div>
+            <div class="form-group"><label>Category</label>
+                <select id="edit-p-category" class="form-select">
+                    <option value="all">All</option>
+                    <option value="mods">Mods</option>
+                    <option value="tools">Tools</option>
+                    <option value="vip">VIP</option>
+                    <option value="scripts">Scripts</option>
+                </select>
+            </div>
+            <div class="form-group"><label>YouTube</label><input id="edit-p-yt" class="form-input" /></div>
+            <div class="form-group"><label>Update Link</label><input id="edit-p-link" class="form-input" /></div>
+            <div class="form-group"><label>Feedback Link</label><input id="edit-p-feedback" class="form-input" /></div>
+            <div class="form-group"><label>Description</label><textarea id="edit-p-desc" class="form-input" rows="3"></textarea></div>
+            <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);margin-bottom:20px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:600;">Plans</span><button class="btn btn-primary btn-sm" onclick="addEditPlanRow()"><i class="fas fa-plus"></i></button></div>
+                <div id="edit-plans-container"></div>
+            </div>
+            <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-edit-panel')">Cancel</button><button class="btn btn-primary" id="btn-save-edit-panel">Save Changes</button></div>
+        </div>
+    </div>
+
+    <!-- EDIT PROMO -->
+    <div class="modal-overlay hidden" id="modal-edit-promo">
+        <div class="modal">
+            <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Promotion</h3><button class="close-btn" onclick="closeModal('modal-edit-promo')"><i class="fas fa-times"></i></button></div>
+            <input id="edit-promo-id" type="hidden" />
+            <div class="form-group"><label>Title</label><input id="edit-promo-title" class="form-input" /></div>
+            <div class="form-group"><label>Image URL</label><input id="edit-promo-img" class="form-input" /></div>
+            <div class="form-group"><label>Link</label><input id="edit-promo-link" class="form-input" /></div>
+            <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-edit-promo')">Cancel</button><button class="btn btn-primary" id="btn-save-edit-promo">Save</button></div>
+        </div>
+    </div>
+
+    <!-- IMAGE PREVIEW -->
+    <div class="modal-overlay hidden" id="modal-image">
+        <div class="modal" style="max-width:500px;">
+            <div class="modal-header"><h3><i class="fas fa-image"></i> Screenshot</h3><button class="close-btn" onclick="closeModal('modal-image')"><i class="fas fa-times"></i></button></div>
+            <img id="preview-image" src="" style="width:100%;border-radius:12px;border:1px solid var(--border-color);max-height:60vh;object-fit:contain;background:var(--bg-input);" />
+            <a id="preview-link" href="#" target="_blank" class="btn btn-outline btn-block" style="margin-top:16px;justify-content:center;"><i class="fas fa-external-link-alt"></i> Open Original</a>
+        </div>
+    </div>
+
+    <!-- ===== APPROVE ORDER MODAL (UPDATED with Download Link) ===== -->
+    <div class="modal-overlay hidden" id="modal-approve-order">
+        <div class="modal" style="max-width:600px;">
+            <div class="modal-header"><h3><i class="fas fa-key" style="color:var(--accent-green);"></i> Approve & Deliver</h3><button class="close-btn" onclick="closeModal('modal-approve-order')"><i class="fas fa-times"></i></button></div>
+            <input id="approve-order-id" type="hidden" />
+            <input id="approve-order-uid" type="hidden" />
+            <input id="approve-panel-name" type="hidden" />
+
+            <!-- License Key -->
+            <div class="form-group">
+                <label>License / Activation Key *</label>
+                <input id="approve-order-key" class="form-input" placeholder="Enter the product key..." />
+            </div>
+
+            <!-- Download Link -->
+            <div class="form-group">
+                <label>Download Link (Panel File)</label>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <input id="approve-download-link" class="form-input" style="flex:1;" placeholder="https://example.com/download" />
+                    <button class="btn btn-outline btn-sm" id="btn-fill-panel-link" style="white-space:nowrap;"><i class="fas fa-sync-alt"></i> Use Panel Link</button>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">
+                    <i class="fas fa-info-circle"></i> Leave empty to use panel's default link. Users will see "Access File" after approval.
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div style="background:var(--bg-input);padding:12px 16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);margin-bottom:16px;font-size:13px;color:var(--text-secondary);">
+                <p><strong>Order Details</strong></p>
+                <p id="approve-order-summary">User: — | Panel: — | Plan: — | ₦0</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal('modal-approve-order')">Cancel</button>
+                <button class="btn btn-success" id="btn-confirm-approve"><i class="fas fa-check-circle"></i> Approve & Deliver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FIREBASE + COMPLETE LOGIC -->
+    <!-- ========================================== -->
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>

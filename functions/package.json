@@ -1,0 +1,11 @@
+{
+  "name": "zerx-xit-sensi-functions",
+  "description": "AI-powered sensitivity generation backend for ZERX-XIT (keeps the AI API key server-side)",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-functions": "^5.0.0",
+    "firebase-admin": "^12.0.0"
+  },
+  "private": true
+}

@@ -1,0 +1,100 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "admins": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).exists()",
+      ".write": false
+    },
+
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+
+        "isVip": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "vipExpiry": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "status": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "banReason": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "bannedAt": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "zerxId": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "balance": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+        "verifyAttempts": { ".write": "auth != null && root.child('admins').child(auth.uid).exists()" }
+      }
+    },
+
+    "orders": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())"
+      }
+    },
+    "transactions": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())"
+      }
+    },
+    "notifications": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())"
+      }
+    },
+    "sensiHistory": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())"
+      }
+    },
+    "referrals": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).exists())",
+        ".write": "auth != null"
+      }
+    },
+
+    "manual_deposits": {
+      "$depositId": {
+        ".read": "auth != null && (root.child('admins').child(auth.uid).exists() || data.child('uid').val() === auth.uid)",
+        ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || (!data.exists() && newData.child('uid').val() === auth.uid))"
+      }
+    },
+
+    "appeals": {
+      "$appealId": {
+        ".read": "auth != null && (root.child('admins').child(auth.uid).exists() || data.child('uid').val() === auth.uid)",
+        ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || (!data.exists() && newData.child('uid').val() === auth.uid))"
+      }
+    },
+
+    "ratings": {
+      ".read": true,
+      "$ratingId": {
+        ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || (!data.exists() && newData.child('uid').val() === auth.uid))"
+      }
+    },
+
+    "settings": {
+      ".read": true,
+      ".write": "auth != null && root.child('admins').child(auth.uid).exists()",
+      "verification": {
+        "code": {
+          ".read": "auth != null && root.child('admins').child(auth.uid).exists()"
+        }
+      }
+    },
+
+    "panels": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+    "promotions": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+    "coupons": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+    "devices": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+    "support_links": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+    "global_notifications": { ".read": true, ".write": "auth != null && root.child('admins').child(auth.uid).exists()" },
+    "sensiGenerationsLog": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).exists()",
+      ".write": "auth != null"
+    }
+  }
+}

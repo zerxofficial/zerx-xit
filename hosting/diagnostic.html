@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+<title>ZERX-XIT | Connection Diagnostic</title>
+<meta name="description" content="Checks whether your device can reach ZERX-XIT's servers." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23ef4136'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial,sans-serif' font-weight='900' fill='%23fff' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<style>
+    :root {
+        --bg-deep: #05070a;
+        --bg-primary: #0a0e14;
+        --bg-secondary: #121822;
+        --bg-card: rgba(19, 24, 32, 0.97);
+        --bg-input: rgba(14, 18, 24, 0.95);
+        --border-color: rgba(239, 65, 54, 0.18);
+        --border-light: rgba(239, 65, 54, 0.34);
+        --text-primary: #f5f6f7;
+        --text-secondary: #b4bac2;
+        --text-muted: #838b96;
+        --accent-primary: #ef4136;
+        --accent-primary-dark: #b7291f;
+        --accent-primary-light: #ff6f61;
+        --accent-primary-rgb: 239, 65, 54;
+        --accent-green: #34d399;
+        --accent-gold: #eab308;
+        --shadow-card: 0 12px 44px rgba(0, 0, 0, 0.6);
+        --radius: 18px;
+        --radius-sm: 10px;
+        --transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Inter', sans-serif;
+        background: radial-gradient(ellipse at top, var(--bg-secondary) 0%, var(--bg-deep) 55%);
+        color: var(--text-primary);
+        min-height: 100vh;
+        padding: 28px 18px 60px;
+    }
+    .wrap { max-width: 560px; margin: 0 auto; }
+
+    .brand { text-align: center; margin-bottom: 28px; }
+    .brand .logo-icon {
+        width: 60px; height: 60px; margin: 0 auto 14px;
+        background: linear-gradient(135deg, var(--accent-primary-light), var(--accent-primary-dark));
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 24px; font-weight: 900; color: #fff;
+        box-shadow: 0 12px 36px rgba(var(--accent-primary-rgb), 0.35);
+        font-family: 'Space Grotesk', sans-serif;
+    }
+    .brand h1 { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; }
+    .brand h1 span { color: var(--accent-primary); }
+    .brand p { font-size: 12.5px; color: var(--text-muted); margin-top: 5px; }
+
+    .card {
+        background: var(--bg-card);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        margin-bottom: 12px;
+        transition: var(--transition);
+    }
+    .card .label {
+        font-size: 10.5px; font-weight: 700; color: var(--text-muted);
+        text-transform: uppercase; letter-spacing: 0.6px;
+        display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    }
+    .card .label .dot {
+        width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted);
+        transition: var(--transition); flex-shrink: 0;
+    }
+    .card.pending .dot { background: var(--accent-gold); box-shadow: 0 0 10px rgba(245, 185, 66, 0.6); animation: pulse 1.4s infinite; }
+    .card.ok .dot { background: var(--accent-green); box-shadow: 0 0 10px rgba(52, 211, 153, 0.6); }
+    .card.bad .dot { background: var(--accent-primary); box-shadow: 0 0 10px rgba(var(--accent-primary-rgb), 0.6); }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .card .value {
+        font-family: 'Space Grotesk', monospace; font-size: 13px; line-height: 1.6;
+        white-space: pre-wrap; word-break: break-word;
+    }
+    .card.ok .value { color: var(--accent-green); }
+    .card.bad .value { color: var(--accent-primary-light); }
+    .card.pending .value { color: var(--text-secondary); }
+
+    .verdict {
+        text-align: center; padding: 18px; border-radius: var(--radius);
+        margin: 4px 0 18px; font-size: 13.5px; font-weight: 700; display: none;
+        border: 1px solid var(--border-color);
+    }
+    .verdict.show { display: block; }
+    .verdict.good { background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3); color: var(--accent-green); }
+    .verdict.warn { background: rgba(245, 185, 66, 0.08); border-color: rgba(245, 185, 66, 0.3); color: var(--accent-gold); }
+    .verdict.fail { background: rgba(var(--accent-primary-rgb), 0.08); border-color: rgba(var(--accent-primary-rgb), 0.3); color: var(--accent-primary-light); }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 26px 0 14px; }
+    .divider span { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; white-space: nowrap; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+
+    .input-group { position: relative; margin-bottom: 12px; }
+    .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
+    .input-group input {
+        width: 100%; padding: 14px 16px 14px 42px; border-radius: var(--radius-sm);
+        border: 1px solid var(--border-color); background: var(--bg-input);
+        color: var(--text-primary); font-size: 14px; font-family: inherit;
+    }
+    .input-group input:focus { outline: none; border-color: var(--accent-primary); }
+
+    .btn {
+        width: 100%; padding: 15px; border-radius: var(--radius-sm); border: none;
+        background: linear-gradient(135deg, var(--accent-primary-light), var(--accent-primary-dark));
+        color: #fff; font-size: 14.5px; font-weight: 800; cursor: pointer;
+        transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:not(:disabled):active { transform: scale(0.98); }
+
+    .foot {
+        font-size: 11.5px; color: var(--text-muted); line-height: 1.7;
+        text-align: center; margin-top: 26px; padding: 0 8px;
+    }
+    .foot a { color: var(--accent-primary-light); text-decoration: none; }
+    noscript {
+        display: block; background: rgba(var(--accent-primary-rgb), 0.1);
+        border: 1px solid rgba(var(--accent-primary-rgb), 0.3); color: var(--accent-primary-light);
+        padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 12.5px;
+    }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="brand">
+        <div class="logo-icon">ZX</div>
+        <h1>ZERX<span>-XIT</span> Diagnostic</h1>
+        <p>Checks whether this device can actually reach our servers</p>
+    </div>
+
+    <noscript>JavaScript isn't running — open this page in a real browser (Chrome/Safari), not a chat app's built-in preview.</noscript>
+
+    <div class="verdict" id="verdict"></div>
+
+    <div class="card pending" id="c-js"><div class="label"><span class="dot"></span>JavaScript running</div><div class="value" id="r-js">Waiting…</div></div>
+    <div class="card pending" id="c-online"><div class="label"><span class="dot"></span>Device online</div><div class="value" id="r-online">Waiting…</div></div>
+    <div class="card pending" id="c-db"><div class="label"><span class="dot"></span>Reach database server</div><div class="value" id="r-db">Waiting…</div></div>
+    <div class="card pending" id="c-authd"><div class="label"><span class="dot"></span>Reach authentication server</div><div class="value" id="r-authd">Waiting…</div></div>
+    <div class="card pending" id="c-sdk"><div class="label"><span class="dot"></span>Firebase SDK ready</div><div class="value" id="r-sdk">Waiting…</div></div>
+
+    <div class="divider"><span>Optional login test</span></div>
+
+    <div class="card">
+        <div class="input-group"><i class="fas fa-envelope"></i><input id="test-email" placeholder="Email" autocomplete="off" /></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input id="test-pass" type="password" placeholder="Password" autocomplete="off" /></div>
+        <button class="btn" id="btn-test-login" disabled><i class="fas fa-spinner fa-spin"></i> Loading…</button>
+        <div class="value" id="r-login" style="margin-top:12px;">Not run yet.</div>
+    </div>
+
+    <p class="foot">Runs entirely in your browser — nothing is sent anywhere except the standard checks ZERX-XIT itself makes. Your password is only used for this one test and isn't stored.</p>
+</div>
+
+<script>
+    function setCard(id, state) {
+        document.getElementById(id).className = 'card ' + state;
+    }
+    function setRow(cardId, valueId, text, state) {
+        document.getElementById(valueId).textContent = text;
+        setCard(cardId, state);
+    }
+    function showVerdict() {
+        var db = document.getElementById('c-db').className;
+        var authd = document.getElementById('c-authd').className;
+        var sdk = document.getElementById('c-sdk').className;
+        if (db.indexOf('pending') > -1 || authd.indexOf('pending') > -1 || sdk.indexOf('pending') > -1) return;
+        var v = document.getElementById('verdict');
+        v.classList.add('show');
+        if (db.indexOf('bad') > -1 || authd.indexOf('bad') > -1 || sdk.indexOf('bad') > -1) {
+            v.className = 'verdict show fail';
+            v.innerHTML = '<i class="fas fa-triangle-exclamation"></i> This device/network can\'t reach our servers right now. Try different WiFi/data, or turn off any VPN / Private DNS.';
+        } else {
+            v.className = 'verdict show good';
+            v.innerHTML = '<i class="fas fa-circle-check"></i> Everything reachable. If login still fails, run the test below with your real details.';
+        }
+    }
+
+    document.getElementById('r-js').textContent = 'Yes — ' + new Date().toLocaleTimeString();
+    setCard('c-js', 'ok');
+    var isOnline = navigator.onLine;
+    document.getElementById('r-online').textContent = isOnline ? 'navigator.onLine = true' : 'navigator.onLine = false — device reports no connection';
+    setCard('c-online', isOnline ? 'ok' : 'bad');
+</script>
+
+<!-- Classic (non-module) Firebase SDK — works over file:// and in restrictive WebViews -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+    var start2 = Date.now();
+    fetch('https://zerx-store-bd8f0-default-rtdb.firebaseio.com/.json', { method: 'GET', cache: 'no-store' })
+        .then(function(r) {
+            var ms = Date.now() - start2;
+            var slow = ms > 3000 ? ' (slow — normally under 1s)' : '';
+            setRow('c-db', 'r-db', 'Reached in ' + ms + 'ms — HTTP ' + r.status + slow, ms > 3000 ? 'bad' : 'ok');
+            showVerdict();
+        })
+        .catch(function(err) {
+            var ms = Date.now() - start2;
+            setRow('c-db', 'r-db', 'FAILED after ' + ms + 'ms — ' + err.name + ': ' + err.message, 'bad');
+            showVerdict();
+        });
+
+    var start3 = Date.now();
+    fetch('https://zerx-store-bd8f0.firebaseapp.com/__/auth/handler', { method: 'GET', mode: 'no-cors', cache: 'no-store' })
+        .then(function() {
+            var ms = Date.now() - start3;
+            var slow = ms > 3000 ? ' (slow — normally under 1s)' : '';
+            setRow('c-authd', 'r-authd', 'Reached in ' + ms + 'ms' + slow, ms > 3000 ? 'bad' : 'ok');
+            showVerdict();
+        })
+        .catch(function(err) {
+            var ms = Date.now() - start3;
+            setRow('c-authd', 'r-authd', 'FAILED after ' + ms + 'ms — ' + err.name + ': ' + err.message, 'bad');
+            showVerdict();
+        });
+
+    var auth = null;
+    try {
+        if (typeof firebase === 'undefined') {
+            throw new Error("Firebase SDK script didn't load — check your connection or that gstatic.com isn't blocked.");
+        }
+        var firebaseConfig = {
+            apiKey: "AIzaSyCg7NOSOU-qz2oUpHKCFnSUwsbXXiVhyKI",
+            authDomain: "zerx-store-bd8f0.firebaseapp.com",
+            databaseURL: "https://zerx-store-bd8f0-default-rtdb.firebaseio.com",
+            projectId: "zerx-store-bd8f0",
+            storageBucket: "zerx-store-bd8f0.firebasestorage.app",
+            messagingSenderId: "752918613405",
+            appId: "1:752918613405:web:5f2d67161560e530bef374",
+            measurementId: "G-9EVSLL88MH"
+        };
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        setRow('c-sdk', 'r-sdk', 'Initialized successfully', 'ok');
+        var btn = document.getElementById('btn-test-login');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Run login test';
+    } catch (e) {
+        setRow('c-sdk', 'r-sdk', 'FAILED — ' + (e.code || e.name) + ': ' + e.message, 'bad');
+        document.getElementById('btn-test-login').innerHTML = 'Firebase failed to load';
+    }
+    showVerdict();
+
+    document.getElementById('btn-test-login').addEventListener('click', function() {
+        var email = document.getElementById('test-email').value.trim();
+        var pass = document.getElementById('test-pass').value;
+        var btn = this;
+        var out = document.getElementById('r-login');
+        if (!email || !pass) { out.textContent = 'Enter email and password first.'; out.style.color = 'var(--accent-primary-light)'; return; }
+        if (!auth) { out.textContent = 'Firebase never initialized — see above.'; out.style.color = 'var(--accent-primary-light)'; return; }
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing…';
+        out.style.color = 'var(--accent-gold)';
+        out.textContent = 'Running…';
+        var start = Date.now();
+        auth.signInWithEmailAndPassword(email, pass).then(function(cred) {
+            var ms = Date.now() - start;
+            out.style.color = 'var(--accent-green)';
+            out.textContent = 'SUCCESS in ' + ms + 'ms — signed in as ' + cred.user.email;
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Run login test';
+        }).catch(function(e) {
+            var ms = Date.now() - start;
+            out.style.color = 'var(--accent-primary-light)';
+            out.textContent = 'FAILED after ' + ms + 'ms\ncode: ' + (e.code || 'none') + '\nmessage: ' + (e.message || 'none');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Run login test';
+        });
+    });
+</script>
+</body>
+</html>
