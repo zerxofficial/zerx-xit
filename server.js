@@ -166,11 +166,14 @@ async function callGroq(apiKey, model, prompt) {
                 model,
                 messages: [{ role: 'user', content: prompt }],
                 temperature: 0.5,
-                max_tokens: 300,
-                // Groq's OpenAI-compatible endpoint supports strict JSON mode on
-                // its current instruction-tuned models — this is what actually
-                // stops the model from wrapping the reply in prose or fences.
-                response_format: { type: 'json_object' }
+                max_tokens: 300
+                // Deliberately NOT sending response_format: json_object here —
+                // not every model Groq serves supports that parameter, and an
+                // unsupported param makes the ENTIRE request fail with a 400
+                // on every single call, which looks identical to "AI always
+                // fails" from the outside. extractJSON() below is the safety
+                // net instead: it pulls the {...} object out of the reply
+                // regardless of whether the model wrapped it in text.
             }),
             signal: controller.signal
         });
@@ -293,8 +296,8 @@ app.post('/api/generateSensi', async (req, res) => {
         return;
     }
 
-    const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
-    const apiKey = process.env.GROQ_API_KEY;
+    const model = (process.env.GROQ_MODEL || 'openai/gpt-oss-120b').trim();
+    const apiKey = process.env.GROQ_API_KEY ? process.env.GROQ_API_KEY.trim() : '';
 
     // No key configured at all — this is an intentional, honestly-labeled
     // mode, not a failure. The offline calculator is a real hardware-aware
@@ -324,7 +327,7 @@ app.post('/api/generateSensi', async (req, res) => {
     res.status(200).json({
         success: false,
         source: 'error',
-        message: 'AI generation failed and was not used. You can generate an offline hardware-based estimate instead, or try AI generation again.',
+        message: 'AI generation failed: ' + (reason || 'unknown error') + '. Showing an offline estimate instead.',
         offlineFallback: { ...det, reasoning: 'Calculated from device hardware profile using the offline model.' },
         play_style: style
     });
@@ -409,6 +412,7 @@ app.post('/api/verifyZerxCode', async (req, res) => {
 app.get('/healthz', (req, res) => res.status(200).json({
     ok: true,
     groqConfigured: !!process.env.GROQ_API_KEY,
+    groqModel: (process.env.GROQ_MODEL || 'openai/gpt-oss-120b').trim(),
     verificationDbConfigured: !!adminDb
 }));
 
