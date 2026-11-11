@@ -134,8 +134,9 @@ async function callGroq(apiKey, model, prompt) {
                 model,
                 messages: [{ role: 'user', content: prompt }],
                 temperature: 0.5,
-                max_tokens: 300,
-                response_format: { type: 'json_object' }
+                max_tokens: 300
+                // Deliberately no response_format: json_object — see server.js
+                // for why. extractJSON() below is the safety net instead.
             }),
             signal: controller.signal
         });
@@ -263,8 +264,8 @@ exports.generateSensi = onRequest(
             return;
         }
 
-        const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
-        const apiKey = GROQ_API_KEY.value();
+        const model = (process.env.GROQ_MODEL || 'openai/gpt-oss-120b').trim();
+        const apiKey = (GROQ_API_KEY.value() || '').trim();
 
         // No key configured — an intentional, honestly-labeled mode, not a
         // failure. The offline calculator is a real hardware-aware model
@@ -294,7 +295,7 @@ exports.generateSensi = onRequest(
         res.status(200).json({
             success: false,
             source: 'error',
-            message: 'AI generation failed and was not used. You can generate an offline hardware-based estimate instead, or try AI generation again.',
+            message: 'AI generation failed: ' + (reason || 'unknown error') + '. Showing an offline estimate instead.',
             offlineFallback: { ...det, reasoning: 'Calculated from device hardware profile using the offline model.' },
             play_style: style
         });

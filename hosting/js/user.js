@@ -3432,7 +3432,12 @@
 
                     // --- DESCRIPTION / FEATURES ---
                     const desc = p.description || 'Premium tool';
-                    const features = desc.split(/\n|-/).filter(f => f && f.trim().length > 0);
+                    // Split on newlines, and on a leading bullet dash at the
+                    // start of a line only — NOT every hyphen in the text.
+                    // (The old /\n|-/ split broke hyphenated words like
+                    // "Anti-ban" into two separate "Anti" / "ban" chips.)
+                    const features = desc.split(/\n/).map(line => line.replace(/^\s*-\s*/, ''))
+                        .filter(f => f && f.trim().length > 0);
                     const featuresHtml = features.map(f =>
                         '<span class="chip"><i class="fas fa-bolt"></i> ' + f.trim() + '</span>'
                     ).join('');
@@ -3446,8 +3451,10 @@
 
                     // --- PLANS ---
                     let plansHtml = '';
+                    let priceFrom = null;
                     if (p.plans && Object.keys(p.plans).length > 0) {
                         const sorted = Object.entries(p.plans).sort((a, b) => (a[1].price || 0) - (b[1].price || 0));
+                        priceFrom = sorted[0][1].price || 0;
                         plansHtml = '<select class="plan-select" id="plan-' + panelId + '">';
                         sorted.forEach(([key, data]) => {
                             const label = data.label || (data.days ? data.days + ' Days' : 'Plan');
@@ -3501,7 +3508,7 @@
                             `;
                     } else {
                         bannerHtml = `
-                                <div class="banner-wrap" style="background:var(--bg-input);">
+                                <div class="banner-wrap no-banner" style="background:var(--bg-input);">
                                     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;font-weight:600;gap:6px;">
                                         <i class="fas fa-image" style="font-size:32px;opacity:0.3;"></i>
                                         <span>No Banner</span>
@@ -3512,6 +3519,8 @@
                     }
 
                     // Panel name with logo on left
+                    const priceHtml = priceFrom !== null ?
+                        `<span class="price-pill">From ₦${priceFrom}</span>` : '';
                     let nameHtml = `<span class="panel-name">${p.name || 'Panel'}</span>`;
                     if (logoUrl && logoUrl.startsWith('http')) {
                         nameHtml = `
@@ -3527,6 +3536,7 @@
                         '<div class="panel-name-wrap">' +
                         nameHtml +
                         ' <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>' +
+                        priceHtml +
                         '</div>' +
                         '<div class="feature-list">' + featuresHtml + '</div>' +
                         '<div class="trust-row">' +
