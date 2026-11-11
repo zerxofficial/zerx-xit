@@ -2,35 +2,27 @@
            ROOT VARIABLES — DARK THEME (DEFAULT)
            ============================================ */
         :root {
-            /* Colors below are sampled directly (pixel-measured) from the
-               Sept 2026 reference walkthrough video, not eyeballed: a deep
-               wine-black base with a crimson/magenta brand accent, and a
-               blush-pink (not neutral-gray) light contrast band. */
+            /* Matched directly against the reference video (goodluckstore.org
+               style): a cooler, neutral near-black — not red-tinted — with a
+               punchier vermillion-red accent sampled from its buttons/headline. */
             --bg-deep: #05070a;
             --bg-primary: #0a0e14;
             --bg-secondary: #121822;
             --bg-card: rgba(19, 24, 32, 0.97);
             --bg-card-hover: rgba(26, 32, 42, 0.98);
             --bg-input: rgba(14, 18, 24, 0.95);
-            --border-color: rgba(179, 1, 59, 0.18);
-            --border-light: rgba(179, 1, 59, 0.34);
+            --border-color: rgba(239, 65, 54, 0.16);
+            --border-light: rgba(239, 65, 54, 0.32);
             --text-primary: #f5f6f7;
             --text-secondary: #b4bac2;
             --text-muted: #838b96;
 
-            /* Reference-sampled: numbered badges ~#b3013b, solid button fills
-               ~#8c1332 (darker), gradient heading highlight ~#e55f8c (lighter). */
-            --accent-primary: #b3013b;
-            --accent-primary-dark: #7a0129;
-            --accent-primary-light: #e0477e;
-            --accent-primary-rgb: 179, 1, 59;
+            --accent-primary: #ef4136;
+            --accent-primary-dark: #b7291f;
+            --accent-primary-light: #ff6f61;
+            --accent-primary-rgb: 239, 65, 54;
             --accent-glow: rgba(var(--accent-primary-rgb), 0.2);
             --accent-glow-strong: rgba(var(--accent-primary-rgb), 0.12);
-
-            /* Reference hero/CTA sections sit on a wine-black distinct from
-               the app's neutral --bg-primary — used only by .land-hero/.land-cta. */
-            --land-dark-bg: #1b0810;
-            --land-dark-bg-2: #120509;
 
             --accent-blue: #60a5fa;
             --accent-purple: #a78bfa;
@@ -39,13 +31,13 @@
             --accent-red: #f87171;
             --accent-gold: #eab308;
 
-            /* Reference-sampled blush-pink light band (#fdf1f3), used by
-               .land-section.light between the dark hero/CTA sections. */
-            --light-band-bg: #fdf1f3;
-            --light-band-text: #1a0d10;
-            --light-band-text-muted: #7a5a62;
+            /* The reference site alternates in a light, near-white band
+               ("Why choose us") between dark sections — used by .land-section.light */
+            --light-band-bg: #f7f8fa;
+            --light-band-text: #14181f;
+            --light-band-text-muted: #5b6472;
             --light-band-card: #ffffff;
-            --light-band-border: rgba(179, 1, 59, 0.12);
+            --light-band-border: rgba(20, 24, 31, 0.08);
 
             --shadow-card: 0 12px 44px rgba(0, 0, 0, 0.6);
             --shadow-glow: 0 0 50px rgba(var(--accent-primary-rgb), 0.14);
@@ -1549,24 +1541,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* When there's no banner image, the placeholder doesn't need the
-           full 52%-of-width banner height — that's dead space on a product
-           grid. Collapse it to a slim strip instead. */
-        .panel-card .banner-wrap.no-banner {
-            padding-bottom: 0;
-            height: 56px;
-        }
-        .panel-card .banner-wrap.no-banner > div {
-            flex-direction: row !important;
-            gap: 8px !important;
-        }
-        .panel-card .banner-wrap.no-banner i {
-            font-size: 16px !important;
-            opacity: 0.4;
-        }
-        .panel-card .banner-wrap.no-banner span {
-            font-size: 12px;
-        }
         .panel-card .banner-wrap img.banner-img {
             position: absolute;
             inset: 0;
@@ -1618,17 +1592,6 @@
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
-        }
-        .panel-card .panel-body .panel-name-wrap .price-pill {
-            margin-left: auto;
-            font-size: 13px;
-            font-weight: 800;
-            color: #fff;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-dark));
-            padding: 5px 14px;
-            border-radius: 30px;
-            white-space: nowrap;
-            box-shadow: 0 4px 14px var(--accent-glow);
         }
         .panel-card .panel-body .panel-name-wrap .panel-name .verified-badge {
             font-size: 12px;
@@ -3975,26 +3938,45 @@
         .land-nav .land-actions button { padding: 9px 16px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700; border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-secondary); cursor: pointer; }
         .land-nav .land-actions button.primary { background: linear-gradient(135deg, var(--accent-primary-light), var(--accent-primary)); color: #fff; border: none; }
 
-        /* Flat (not per-element gradient) so the nav and hero read as one
-           continuous wine-black panel with no visible seam between them,
-           matching the reference where the header bar and hero never break. */
-        .land-nav, .land-hero { background: var(--land-dark-bg); }
-        .land-hero { text-align: center; padding: 56px 20px 48px; max-width: 640px; margin: 0 auto; }
-        .land-hero h1 { font-size: 32px; font-weight: 800; line-height: 1.22; letter-spacing: -0.5px; margin-bottom: 16px; }
-        .land-hero h1 span { color: var(--accent-primary-light); }
-        .land-hero p { color: var(--text-secondary); font-size: 14.5px; line-height: 1.7; margin-bottom: 28px; }
-        /* Checkmark grid — reference is a strict 2-column x 2-row grid, not
-           a wrapping row: two short facts per line, left-aligned text. */
-        .land-hero-stats { display: inline-grid; grid-template-columns: repeat(2, auto); gap: 14px 28px; text-align: left; }
-        .land-hero-stats .stat { display: flex; align-items: center; gap: 9px; }
-        .land-hero-stats .stat::before {
-            content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; font-size: 10px;
-            width: 20px; height: 20px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            background: rgba(var(--accent-primary-rgb), 0.16); color: var(--accent-primary-light);
-            border: 1px solid rgba(var(--accent-primary-rgb), 0.4);
+        .land-hero { text-align: center; padding: 48px 20px 36px; max-width: 640px; margin: 0 auto; }
+        .land-hero .land-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 700; letter-spacing: 0.2px;
+            color: var(--text-primary);
+            background: rgba(var(--accent-primary-rgb), 0.1);
+            border: 1px solid rgba(var(--accent-primary-rgb), 0.3);
+            padding: 8px 16px 8px 12px; border-radius: 30px; margin-bottom: 22px;
         }
-        .land-hero-stats .stat b { font-family: inherit; font-size: 13.5px; font-weight: 700; color: var(--text-primary); }
-        .land-hero-stats .stat span { font-size: 13.5px; color: var(--text-secondary); margin-left: 4px; }
+        .land-hero .land-tag .dot {
+            width: 7px; height: 7px; border-radius: 50%; background: var(--accent-primary);
+            box-shadow: 0 0 8px rgba(var(--accent-primary-rgb), 0.8); flex-shrink: 0;
+            animation: pulseDot 1.8s ease-in-out infinite;
+        }
+        @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .land-hero h1 { font-size: 32px; font-weight: 800; line-height: 1.22; letter-spacing: -0.5px; margin-bottom: 16px; }
+        .land-hero h1 span { color: var(--accent-primary); }
+        .land-hero p { color: var(--text-secondary); font-size: 14.5px; line-height: 1.7; margin-bottom: 28px; }
+        .land-hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+        .land-hero-btns button {
+            padding: 15px 28px; border-radius: 100px; font-size: 14px; font-weight: 800;
+            cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;
+            transition: var(--transition);
+        }
+        .land-hero-btns .primary {
+            background: linear-gradient(135deg, var(--accent-primary-light), var(--accent-primary));
+            color: #fff; box-shadow: 0 10px 30px rgba(var(--accent-primary-rgb), 0.35);
+        }
+        .land-hero-btns .primary:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(var(--accent-primary-rgb), 0.45); }
+        .land-hero-btns .outline {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-light); color: var(--text-primary);
+        }
+        .land-hero-btns .outline:hover { background: rgba(255, 255, 255, 0.06); }
+        .land-hero-stats { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; }
+        .land-hero-stats .stat b {
+            display: block; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800;
+            color: var(--accent-primary);
+        }
+        .land-hero-stats .stat span { font-size: 11.5px; color: var(--text-muted); }
 
         .land-section { max-width: 1100px; margin: 0 auto; padding: 48px 20px; }
         .land-section-head { text-align: center; margin-bottom: 30px; }
@@ -4021,61 +4003,15 @@
         .land-section.light .land-card h3 { color: var(--light-band-text); }
         .land-section.light .land-card p { color: var(--light-band-text-muted); }
 
-        /* Reference pattern: card fill is nearly the same tone as the section
-           behind it (no contrasting white fill, no drop shadow) — just a
-           border doing the work. The numbered badge sits fully INSIDE the
-           card in generous top padding, not straddling the border. The icon
-           below it is a bare outlined glyph with no background chip. */
-        .land-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px 14px; }
-        .land-step {
-            background: transparent; border: 1px solid var(--border-color);
-            border-radius: var(--radius); padding: 36px 22px 28px; text-align: center;
-        }
-        .land-section.light .land-step { border-color: var(--light-band-border); }
+        .land-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+        .land-step { position: relative; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 22px; text-align: left; }
         .land-step .num {
-            width: 46px; height: 46px; margin: 0 auto 20px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 800;
-            background: var(--accent-primary); color: #fff; box-shadow: 0 8px 20px rgba(var(--accent-primary-rgb), 0.45);
+            width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 800;
+            background: rgba(var(--accent-primary-rgb), 0.12); color: var(--accent-primary); margin-bottom: 14px;
         }
-        .land-step .step-icon { font-size: 26px; color: var(--accent-primary); margin-bottom: 16px; }
-        .land-step h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-        .land-step p { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
-        .land-section.light .land-step h3 { color: var(--light-band-text); }
-        .land-section.light .land-step p { color: var(--light-band-text-muted); }
-
-        /* Support-chat preview — a dark card dropped into the light band,
-           same contrast relationship as the reference's demo-chat widget. */
-        .land-chat-preview {
-            max-width: 480px; margin: 36px auto 0; background: var(--bg-card);
-            border: 1px solid var(--border-color); border-radius: var(--radius-lg);
-            padding: 22px; text-align: left; box-shadow: 0 20px 50px rgba(20, 5, 10, 0.12);
-        }
-        .chat-head { display: flex; align-items: center; gap: 12px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); }
-        .chat-avatar {
-            width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-            background: var(--accent-primary); color: #fff; font-weight: 800; font-size: 13px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .chat-name { font-weight: 700; font-size: 14.5px; color: var(--text-primary); }
-        .chat-status { font-size: 12px; color: var(--accent-green); display: flex; align-items: center; gap: 5px; margin-top: 2px; }
-        .chat-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); }
-        .chat-body { display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px; }
-        .chat-msg p { padding: 11px 15px; border-radius: 14px; font-size: 13px; line-height: 1.55; max-width: 85%; }
-        .chat-msg span { display: block; font-size: 10.5px; color: var(--text-muted); margin-top: 5px; }
-        .chat-msg.them p { background: var(--bg-input); color: var(--text-secondary); border-bottom-left-radius: 4px; }
-        .chat-msg.them span { text-align: left; }
-        .chat-msg.me { display: flex; flex-direction: column; align-items: flex-end; }
-        .chat-msg.me p { background: rgba(var(--accent-primary-rgb), 0.22); color: var(--text-primary); border-bottom-right-radius: 4px; }
-        .chat-input {
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
-            background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 100px; padding: 12px 10px 12px 18px;
-        }
-        .chat-input span { font-size: 12.5px; color: var(--text-muted); }
-        .chat-input i {
-            width: 32px; height: 32px; border-radius: 50%; background: var(--accent-primary); color: #fff;
-            display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;
-        }
+        .land-step h3 { font-size: 13.5px; font-weight: 700; margin-bottom: 4px; }
+        .land-step p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
 
         .land-plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 720px; margin: 0 auto; }
         .land-plan { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 26px 22px; text-align: left; }
@@ -4097,16 +4033,12 @@
         .land-cta {
             position: relative; max-width: 100%; margin: 0; padding: 52px 20px;
             background:
-                linear-gradient(160deg, rgba(var(--accent-primary-rgb), 0.16), var(--land-dark-bg-2) 65%),
+                linear-gradient(160deg, rgba(var(--accent-primary-rgb), 0.16), var(--bg-deep) 65%),
                 repeating-linear-gradient(0deg, rgba(var(--accent-primary-rgb), 0.08) 0, rgba(var(--accent-primary-rgb), 0.08) 1px, transparent 1px, transparent 40px),
                 repeating-linear-gradient(90deg, rgba(var(--accent-primary-rgb), 0.08) 0, rgba(var(--accent-primary-rgb), 0.08) 1px, transparent 1px, transparent 40px);
             text-align: center; overflow: hidden;
         }
         .land-cta-inner { max-width: 520px; margin: 0 auto; position: relative; }
-        .land-cta-eyebrow {
-            display: block; font-size: 12px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
-            color: var(--accent-primary-light); margin-bottom: 10px;
-        }
         .land-cta h2 { font-size: 23px; font-weight: 800; margin-bottom: 10px; }
         .land-cta p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 26px; }
         .land-cta-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
@@ -4123,7 +4055,7 @@
 
         /* Footer -- multi-column like the reference, built from existing
            community/social links plus quick-nav anchors. */
-        .land-footer { max-width: 100%; background: var(--land-dark-bg-2); border-top: 1px solid var(--border-color); padding: 44px 20px 24px; }
+        .land-footer { max-width: 100%; background: var(--bg-primary); border-top: 1px solid var(--border-color); padding: 44px 20px 24px; }
         .land-footer-inner { max-width: 1100px; margin: 0 auto; }
         .land-footer-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 28px; margin-bottom: 30px; }
         .land-footer-brand p { font-size: 12.5px; color: var(--text-muted); line-height: 1.7; margin: 10px 0 16px; max-width: 260px; }
